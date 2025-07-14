@@ -14,6 +14,7 @@ class ClothingProduct extends Product {
   List<String> get availableSizes => _availableSizes;
   set availableSizes(List<String> availableSizes) => _availableSizes = availableSizes;
 
+  @override
   productDetailsFormat() {
     return 'ClothingProduct{id: $id, name: $name, price: $price, description: $description, availableSizes: ${_availableSizes?.join(', ')}}';
   }
