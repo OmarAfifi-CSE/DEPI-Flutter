@@ -1,6 +1,6 @@
 
 class User{
-  String _id;
+  final String _id;
   String _email;
   String _password;
 
@@ -12,7 +12,6 @@ class User{
   String get id => _id;
   String get email => _email;
   String get password => _password;
-  set id(String id) => _id = id;
   set email(String email) => _email = email;
   set password(String password) => _password = password;
 
