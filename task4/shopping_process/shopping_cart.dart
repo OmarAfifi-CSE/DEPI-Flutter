@@ -20,16 +20,14 @@ class ShoppingCart {
       print('Item cannot be empty.');
       return;
     }
-    // Extract the product and quantity from the map
+    // Check for availability at the inventory
     final product = item.keys.first;
     final quantity = item.values.first;
-
-    // Check for availability at the inventory
     if (_inventory.stockAvailableCheck(product, quantity)) {
       _items.add(item);
-      print("Success: $item added to the cart.");
+      print("✅Success: $item added to the cart.");
     } else {
-      print("Failed: Not enough stock for $product to add to cart.");
+      print("❌Failed: Not enough stock for $product to add to cart.");
     }
   }
 

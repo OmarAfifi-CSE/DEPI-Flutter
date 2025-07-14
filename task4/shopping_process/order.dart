@@ -1,6 +1,8 @@
 import '../payment_process/credit_card_payment.dart';
 import '../payment_process/payment_method.dart';
+import '../payment_process/wallet_payment.dart';
 import '../product_catalog/product.dart';
+import 'phone_number_validator.dart';
 
 class Order {
   final String _orderId;
@@ -17,6 +19,7 @@ class Order {
        _createdDate = createdDate,
        _items = items,
        _totalPrice = totalPrice;
+
   // Getters and Setters
   String get orderId => _orderId;
   DateTime get createdDate => _createdDate;
@@ -37,10 +40,17 @@ class Order {
       print('Cannot checkout. Your cart is empty.');
       return;
     }
-    // Check if the payment method is a credit card
+
     if (paymentMethod is CreditCardPayment) {
       if (DateTime.now().isAfter(paymentMethod.expiryDate)) {
-        print('Checkout Failed: Credit card is expired.');
+        print('❌Checkout Failed: Credit card is expired in ${paymentMethod.expiryDate.month}/${paymentMethod.expiryDate.year}.\n');
+        return;
+      }
+    } else if (paymentMethod is WalletPayment) {
+      if (!paymentMethod.phoneNumber.isEgyptianPhoneNumber) {
+        print(
+          '❌Checkout Failed: "${paymentMethod.phoneNumber}" is invalid egyptian phone number for wallet payment.\n',
+        );
         return;
       }
     }
@@ -51,5 +61,6 @@ class Order {
 
     paymentMethod.pay(_totalPrice);
     print('Order completed successfully!');
+    print('--- 🎉 Checkout Process Complete ---\n');
   }
 }

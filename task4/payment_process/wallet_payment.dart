@@ -4,6 +4,7 @@ class WalletPayment extends PaymentMethod {
   final String _phoneNumber;
 
   WalletPayment({required String phoneNumber}) : _phoneNumber = phoneNumber;
+  String get phoneNumber => _phoneNumber;
 
   @override
   void pay(double amount) {

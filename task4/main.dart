@@ -1,6 +1,7 @@
 import 'inventory_management/inventory.dart';
 import 'payment_process/credit_card_payment.dart';
 import 'payment_process/payment_method.dart';
+import 'payment_process/wallet_payment.dart';
 import 'product_catalog/clothing_product.dart';
 import 'product_catalog/electronic_product.dart';
 import 'product_catalog/product.dart';
@@ -53,8 +54,8 @@ void main() {
   Inventory inventory = Inventory(admin: admin);
   print("✅ Inventory created and assigned to Admin '${admin.email}'.");
   inventory.stock = [
-    {product1: 50},
-    {product2: 100},
+    {product1: 10},
+    {product2: 4},
   ];
   print("📦 Initial stock set: ${inventory.stock[0].values} x '${product1.name}', ${inventory.stock[1].values} x '${product2.name}'.");
   print("------------------------------------------");
@@ -63,7 +64,8 @@ void main() {
   ShoppingCart shoppingCart = ShoppingCart(customer: customer, inventory: inventory);
   print("🛒 Shopping cart created for Customer '${customer.email}'.");
   print("🛍️ Adding items to the cart...");
-  shoppingCart.addItem({product1: 1});
+  shoppingCart.addItem({product1: 2});
+  shoppingCart.addItem({product2: 5});
   print("------------------------------------------");
 
   // 5. Order and Payment
@@ -78,12 +80,38 @@ void main() {
 
   PaymentMethod paymentMethod = CreditCardPayment(
     cardNumber: '1234-5678-9012-3456',
-    expiryDate: DateTime(2028, 7),
+    expiryDate: DateTime(2029, 7),
     cvv: '123',
   );
   print("💳 Credit Card payment method prepared.");
 
-  print("\n--- ▶️ Initiating Checkout Process ---");
+  print("\n--- ▶️ Initiating Checkout Process with Credit Card ---");
   order.Checkout(paymentMethod);
-  print("--- 🎉 Checkout Process Complete ---");
+  print('--- Checking credit card payment with expired date ---');
+  paymentMethod = CreditCardPayment(
+    cardNumber: '1234-5678-9012-3456',
+    expiryDate: DateTime(2025, 6),
+    cvv: '123',
+  );
+  print("💳 Credit Card payment method prepared.");
+  print("--- ▶️ Initiating Checkout Process with Credit Card ---");
+  order.Checkout(paymentMethod);
+
+  print('--- Additional payment method example ---');
+  paymentMethod = WalletPayment(
+    phoneNumber: "01234567891",
+  );
+  print("📱 Wallet payment method prepared.");
+  print("--- ▶️ Initiating Checkout Process with Wallet ---");
+  order.Checkout(paymentMethod);
+
+  print('--- Checking wallet payment with invalid phone number ---');
+  paymentMethod = WalletPayment(
+    phoneNumber: "01734567891",
+  );
+  print("📱 Wallet payment method prepared.");
+  print("--- ▶️ Initiating Checkout Process with Wallet ---");
+  order.Checkout(paymentMethod);
+
+  print("--- 🏁 E-commerce System Simulation Complete ---");
 }
