@@ -3,7 +3,7 @@ abstract class Product{
   String _name;
   double _price;
   String _description;
-  String formatProductDetails();
+  String productDetailsFormat();
 
   Product({
     required String id,

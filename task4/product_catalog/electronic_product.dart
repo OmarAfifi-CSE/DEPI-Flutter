@@ -14,7 +14,7 @@ class ElectronicProduct extends Product {
   int get warrantyPeriod => _warrantyPeriod;
   set warrantyPeriod(int warrantyPeriod) => _warrantyPeriod = warrantyPeriod;
 
-  String formatProductDetails() {
+  String productDetailsFormat() {
     return 'ElectronicProduct{id: $id, name: $name, price: $price, description: $description, warrantyPeriod: $_warrantyPeriod months}';
   }
 }
