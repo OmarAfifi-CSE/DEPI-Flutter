@@ -11,6 +11,7 @@ class ElectronicProduct extends Product {
     required int warrantyPeriod,
   }) : _warrantyPeriod = warrantyPeriod,
        super(id: id, name: name, price: price, description: description);
+  // Getter and Setter
   int get warrantyPeriod => _warrantyPeriod;
   set warrantyPeriod(int warrantyPeriod) => _warrantyPeriod = warrantyPeriod;
 

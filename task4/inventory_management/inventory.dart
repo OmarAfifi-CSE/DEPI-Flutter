@@ -6,6 +6,7 @@ class Inventory {
   List<Map<Product, int>> _stock = [];
 
   Inventory({required Admin admin}) : _admin = admin;
+  // Getters and Setters
   Admin get admin => _admin;
   List<Map<Product, int>> get stock => _stock;
   set stock(List<Map<Product, int>> newStock) {

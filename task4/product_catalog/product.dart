@@ -14,6 +14,7 @@ abstract class Product{
         _name = name,
         _price = price,
         _description = description;
+  // Getters and Setters
   String get id => _id;
   String get name => _name;
   double get price => _price;
