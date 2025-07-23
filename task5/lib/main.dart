@@ -63,8 +63,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width / 4;
-    final height = MediaQuery.sizeOf(context).height / 35;
+    final width = 90.0;
+    final height = 22.5;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
