@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = 90.0;
+    final width = 92.0;
     final height = 22.5;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
