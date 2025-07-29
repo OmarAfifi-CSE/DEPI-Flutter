@@ -5,8 +5,9 @@ import 'add_to_cart_button.dart';
 
 class FoodListView extends StatelessWidget {
   final List<FoodItem> _items;
+  final Function(FoodItem) onAddToCart;
 
-  const FoodListView({super.key, required List<FoodItem> items})
+  const FoodListView({super.key, required List<FoodItem> items, required this.onAddToCart})
     : _items = items;
 
   @override
@@ -24,11 +25,11 @@ class FoodListView extends StatelessWidget {
           ),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(item.imagePath, width: 80, fit: BoxFit.cover),
+            child: Image.asset(item.imagePath, width: 80,height: 80, fit: BoxFit.cover),
           ),
           title: Text(item.title),
           subtitle: Text(item.subtitle),
-          trailing: AddToCartButton(),
+          trailing: AddToCartButton(onPressed: () => onAddToCart(item)),
         );
       },
     );

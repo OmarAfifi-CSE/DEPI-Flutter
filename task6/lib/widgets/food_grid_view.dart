@@ -6,8 +6,9 @@ import 'package:task6/widgets/add_to_cart_button.dart';
 
 class FoodGridView extends StatelessWidget {
   final List<FoodItem> _items;
+  final Function(FoodItem) onAddToCart;
 
-  const FoodGridView({super.key, required List<FoodItem> items})
+  const FoodGridView({super.key, required List<FoodItem> items,required this.onAddToCart})
     : _items = items;
 
   @override
@@ -38,7 +39,7 @@ class FoodGridView extends StatelessWidget {
                 Text(item.subtitle, style: TextStyle(color: Colors.grey[500])),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: AddToCartButton(),
+                  child: AddToCartButton(onPressed: () => onAddToCart(item)),
                 ),
               ],
             ),

@@ -6,7 +6,8 @@ import 'package:task6/widgets/food_list_view.dart';
 import 'package:task6/widgets/search_field.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Function(FoodItem) onAddToCart;
+  const HomeScreen({super.key, required this.onAddToCart});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,21 +20,25 @@ class _HomeScreenState extends State<HomeScreen> {
       title: 'Burger Combo',
       subtitle: 'Tasty burger with drink',
       imagePath: 'assets/images/item_1.jpg',
+      price: 15,
     ),
     const FoodItem(
       title: 'Cheese Burger',
       subtitle: 'Delicious burger with fries',
       imagePath: 'assets/images/item_2.jpg',
+      price: 12.5,
     ),
     const FoodItem(
       title: 'Pizza',
       subtitle: 'Freshly baked pizza',
       imagePath: 'assets/images/item_3.jpg',
+      price: 20,
     ),
     const FoodItem(
       title: 'Pasta',
       subtitle: 'Tomato pasta with herbs',
       imagePath: 'assets/images/item_4.jpg',
+      price: 18,
     ),
   ];
 
@@ -79,9 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               if (_currentView == ViewType.list)
-                FoodListView(items: _items)
+                FoodListView(items: _items,onAddToCart: widget.onAddToCart,)
               else
-                FoodGridView(items: _items),
+                FoodGridView(items: _items, onAddToCart: widget.onAddToCart,),
             ],
           ),
         ),
