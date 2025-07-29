@@ -1,13 +1,49 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:task6/models/food_item.dart';
+import 'package:task6/widgets/carousel_widget.dart';
+import 'package:task6/widgets/food_grid_view.dart';
+import 'package:task6/widgets/food_list_view.dart';
+import 'package:task6/widgets/search_field.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  ViewType _currentView = ViewType.list;
+  final List<FoodItem> _items = [
+    const FoodItem(
+      title: 'Burger Combo',
+      subtitle: 'Tasty burger with drink',
+      imagePath: 'assets/images/item_1.jpg',
+    ),
+    const FoodItem(
+      title: 'Cheese Burger',
+      subtitle: 'Delicious burger with fries',
+      imagePath: 'assets/images/item_2.jpg',
+    ),
+    const FoodItem(
+      title: 'Pizza',
+      subtitle: 'Freshly baked pizza',
+      imagePath: 'assets/images/item_3.jpg',
+    ),
+    const FoodItem(
+      title: 'Pasta',
+      subtitle: 'Tomato pasta with herbs',
+      imagePath: 'assets/images/item_4.jpg',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         title: const Text(
           'Food Delivery',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
@@ -24,54 +60,53 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: 'Search for food',
-                  contentPadding: EdgeInsets.symmetric(vertical: 12.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                ),
+              const SearchField(),
+              const SizedBox(height: 20),
+              const CarouselWidget(),
+              const Text(
+                'Featured Items',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildToggleButton('List View', ViewType.list),
+                  const SizedBox(width: 10),
+                  _buildToggleButton('Grid View', ViewType.grid),
+                ],
               ),
               const SizedBox(height: 20),
-              CarouselSlider(
-                options: CarouselOptions(height: 160.0,
-                  initialPage: 0,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 3),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                  enableInfiniteScroll: false,
-                  padEnds: false
-                ),
-                items: [1,2,3].map((i) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                          decoration: BoxDecoration(
-
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: Image.asset(
-                              'assets/images/carousel_item_$i.jpg',
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                      );
-                    },
-                  );
-                }).toList(),
-              )
-
+              if (_currentView == ViewType.list)
+                FoodListView(items: _items)
+              else
+                FoodGridView(items: _items),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildToggleButton(String text, ViewType viewType) {
+    final bool isActive = _currentView == viewType;
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _currentView = viewType;
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isActive ? Colors.red : null,
+          foregroundColor: isActive ? Colors.white : Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          elevation: 0,
+        ),
+        child: Text(text),
       ),
     );
   }
