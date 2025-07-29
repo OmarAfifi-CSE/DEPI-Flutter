@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,18 +29,46 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
                   hintText: 'Search for food',
-                  hintStyle: const TextStyle(
-                    color: Color(0xffB89494),
-                  ),
                   contentPadding: EdgeInsets.symmetric(vertical: 12.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Color(0xffF3E7E7),
                 ),
               ),
+              const SizedBox(height: 20),
+              CarouselSlider(
+                options: CarouselOptions(height: 160.0,
+                  initialPage: 0,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  enableInfiniteScroll: false,
+                  padEnds: false
+                ),
+                items: [1,2,3].map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(14),
+                            child: Image.asset(
+                              'assets/images/carousel_item_$i.jpg',
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                      );
+                    },
+                  );
+                }).toList(),
+              )
+
             ],
           ),
         ),
