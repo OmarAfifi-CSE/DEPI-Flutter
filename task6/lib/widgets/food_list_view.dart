@@ -19,10 +19,7 @@ class FoodListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = _items[index];
         return ListTile(
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 0,
-            horizontal: 0,
-          ),
+          contentPadding: EdgeInsets.zero,
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(item.imagePath, width: 80,height: 80, fit: BoxFit.cover),
