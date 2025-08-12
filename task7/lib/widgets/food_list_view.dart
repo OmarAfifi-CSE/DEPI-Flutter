@@ -9,12 +9,14 @@ class FoodListView extends StatelessWidget {
   final List<FoodItem> _items;
   final VoidCallback goToCart;
 
-  const FoodListView({super.key, required List<FoodItem> items, required this.goToCart})
-    : _items = items;
+  const FoodListView({
+    super.key,
+    required List<FoodItem> items,
+    required this.goToCart,
+  }) : _items = items;
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -25,28 +27,52 @@ class FoodListView extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(item.imagePath, width: 80,height: 80, fit: BoxFit.cover),
+            child: Image.asset(
+              item.imagePath,
+              width: 80,
+              height: 80,
+              fit: BoxFit.cover,
+            ),
           ),
           title: Text(item.title),
           subtitle: Text(item.subtitle),
-          trailing: AddToCartButton(onPressed: () {
-            cartProvider.addToCart(item);
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('\'${item.title}\' added to cart'),
-                duration: const Duration(seconds: 2),
-                backgroundColor: Colors.green,
-                action: SnackBarAction(
-                  label: 'VIEW',
-                  textColor: Colors.white,
-                  onPressed: () {
-                    goToCart();
-                  },
-                ),
-              ),
-            );
-          }),
+          trailing: Consumer<CartProvider>(
+            builder: (context, cartProvider, child) {
+              return AddToCartButton(
+                foodItem: item,
+                onPressed: () {
+                  cartProvider.isItemInCart(item)
+                      ? cartProvider.removeFromCart(item)
+                      : cartProvider.addToCart(item);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  cartProvider.isItemInCart(item)
+                      ? ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('\'${item.title}\' added to cart'),
+                            duration: const Duration(seconds: 2),
+                            backgroundColor: Colors.green,
+                            action: SnackBarAction(
+                              label: 'VIEW',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                goToCart();
+                              },
+                            ),
+                          ),
+                        )
+                      : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '\'${item.title}\' removed from cart',
+                            ),
+                            duration: const Duration(seconds: 2),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                },
+              );
+            },
+          ),
         );
       },
     );

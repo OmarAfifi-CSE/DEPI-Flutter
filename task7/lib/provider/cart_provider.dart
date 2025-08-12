@@ -10,7 +10,7 @@ class CartProvider extends ChangeNotifier {
 
   double get subtotal => cartItems.fold(
     0,
-        (total, current) => total + (current.price * current.quantity),
+    (total, current) => total + (current.price * current.quantity),
   );
 
   double get deliveryFee => 5.00;
@@ -26,7 +26,7 @@ class CartProvider extends ChangeNotifier {
 
   void addToCart(FoodItem foodItem) {
     for (var item in _cartItems) {
-      if (item.title == foodItem.title) {
+      if (item.id == foodItem.id) {
         item.quantity++;
         notifyListeners();
         return;
@@ -34,6 +34,7 @@ class CartProvider extends ChangeNotifier {
     }
     _cartItems.add(
       CartItem(
+        id: foodItem.id,
         title: foodItem.title,
         imagePath: foodItem.imagePath,
         price: foodItem.price,
@@ -53,6 +54,20 @@ class CartProvider extends ChangeNotifier {
     } else {
       _cartItems.remove(item);
     }
+    notifyListeners();
+  }
+
+  bool isItemInCart(FoodItem foodItem) {
+    return _cartItems.any((item) => item.id == foodItem.id);
+  }
+
+  void removeFromCart(FoodItem item) {
+    _cartItems.removeWhere((cartItem) => cartItem.id == item.id);
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _cartItems.clear();
     notifyListeners();
   }
 }

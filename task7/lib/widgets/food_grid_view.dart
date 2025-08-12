@@ -9,12 +9,14 @@ class FoodGridView extends StatelessWidget {
   final List<FoodItem> _items;
   final VoidCallback goToCart;
 
-  const FoodGridView({super.key, required List<FoodItem> items, required this.goToCart})
-    : _items = items;
+  const FoodGridView({
+    super.key,
+    required List<FoodItem> items,
+    required this.goToCart,
+  }) : _items = items;
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -41,24 +43,45 @@ class FoodGridView extends StatelessWidget {
                 Text(item.subtitle, style: TextStyle(color: Colors.grey[500])),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: AddToCartButton(onPressed: () {
-                    cartProvider.addToCart(item);
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('\'${item.title}\' added to cart'),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.green,
-                        action: SnackBarAction(
-                          label: 'VIEW',
-                          textColor: Colors.white,
-                          onPressed: () {
-                            goToCart();
-                          },
-                        ),
-                      ),
-                    );
-                  }),
+                  child: Consumer<CartProvider>(
+                    builder: (context, cartProvider, child) {
+                      return AddToCartButton(
+                        foodItem: item,
+                        onPressed: () {
+                          cartProvider.isItemInCart(item)
+                              ? cartProvider.removeFromCart(item)
+                              : cartProvider.addToCart(item);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          cartProvider.isItemInCart(item)
+                              ? ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '\'${item.title}\' added to cart',
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    backgroundColor: Colors.green,
+                                    action: SnackBarAction(
+                                      label: 'VIEW',
+                                      textColor: Colors.white,
+                                      onPressed: () {
+                                        goToCart();
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '\'${item.title}\' removed from cart',
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

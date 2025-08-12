@@ -26,7 +26,6 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-
   void _onItemTapped(int index) {
     _pageController.animateToPage(
       index,
@@ -38,8 +37,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
-      HomeScreen(goToCart: ()=> _onItemTapped(1),),
-      CartScreen(),
+      HomeScreen(goToCart: () => _onItemTapped(1)),
+      const CartScreen(),
       const ProfileScreen(),
     ];
     return Scaffold(

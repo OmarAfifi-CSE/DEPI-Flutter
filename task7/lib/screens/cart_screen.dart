@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../models/cart_item.dart';
 import '../provider/cart_provider.dart';
@@ -18,10 +19,21 @@ class CartScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: cartProvider.cartItems.isEmpty
-          ? const Center(
-              child: Text(
-                'Your cart is empty.',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+          ? Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/images/empty.json',
+                    width: 300,
+                    height: 300,
+                  ),
+                  const Text(
+                    'Your cart is empty.',
+                    style: TextStyle(fontSize: 24, color: Colors.grey),
+                  ),
+                ],
               ),
             )
           : Column(
@@ -64,56 +76,57 @@ class CartScreen extends StatelessWidget {
       ),
       trailing: Consumer<CartProvider>(
         builder: (context, cartProvider, child) => Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 8,
-        children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
+          mainAxisSize: MainAxisSize.min,
+          spacing: 8,
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                iconSize: 18,
+                icon: const Icon(Icons.remove),
+                onPressed: () {
+                  if (item.quantity == 1) {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('\'${item.title}\' removed from cart'),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.green.shade800,
+                      ),
+                    );
+                  }
+                  cartProvider.decrementCartItem(item);
+                },
+              ),
             ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              iconSize: 18,
-              icon: const Icon(Icons.remove),
-              onPressed: () {
-                if (item.quantity == 1) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('\'${item.title}\' removed from cart'),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.green.shade800,
-                    ),
-                  );
-                }
-                cartProvider.decrementCartItem(item);
-              },
+            Text(
+              item.quantity.toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          ),
-          Text(
-            item.quantity.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                iconSize: 18,
+                icon: const Icon(Icons.add),
+                onPressed: () => cartProvider.incrementCartItem(item),
+              ),
             ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              iconSize: 18,
-              icon: const Icon(Icons.add),
-              onPressed: () => cartProvider.incrementCartItem(item),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Widget _buildCheckoutSection(BuildContext context) {
@@ -131,8 +144,7 @@ class CartScreen extends StatelessWidget {
         ],
       ),
       child: Consumer<CartProvider>(
-        builder: (context, cartProvider, child) =>
-         Column(
+        builder: (context, cartProvider, child) => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildPriceRow(
@@ -159,7 +171,19 @@ class CartScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  cartProvider.clearCart();
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Cart items have been deleted successfully!',
+                      ),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,

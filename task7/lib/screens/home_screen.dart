@@ -7,6 +7,7 @@ import 'package:task7/widgets/search_field.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback goToCart;
+
   const HomeScreen({super.key, required this.goToCart});
 
   @override
@@ -15,32 +16,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ViewType _currentView = ViewType.list;
-  final List<FoodItem> _items = [
-    const FoodItem(
-      title: 'Burger Combo',
-      subtitle: 'Tasty burger with drink',
-      imagePath: 'assets/images/item_1.jpg',
-      price: 15,
-    ),
-    const FoodItem(
-      title: 'Cheese Burger',
-      subtitle: 'Delicious burger with fries',
-      imagePath: 'assets/images/item_2.jpg',
-      price: 12.5,
-    ),
-    const FoodItem(
-      title: 'Pizza',
-      subtitle: 'Freshly baked pizza',
-      imagePath: 'assets/images/item_3.jpg',
-      price: 20,
-    ),
-    const FoodItem(
-      title: 'Pasta',
-      subtitle: 'Tomato pasta with herbs',
-      imagePath: 'assets/images/item_4.jpg',
-      price: 18,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               if (_currentView == ViewType.list)
-                FoodListView(items: _items,goToCart: widget.goToCart)
+                FoodListView(items: foodItems, goToCart: widget.goToCart)
               else
-                FoodGridView(items: _items,goToCart: widget.goToCart),
+                FoodGridView(items: foodItems, goToCart: widget.goToCart),
             ],
           ),
         ),
