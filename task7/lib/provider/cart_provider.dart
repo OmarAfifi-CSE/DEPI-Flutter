@@ -70,4 +70,32 @@ class CartProvider extends ChangeNotifier {
     _cartItems.clear();
     notifyListeners();
   }
+
+  void toggleAddToCartButton(
+    FoodItem item,
+    BuildContext context,
+    VoidCallback onViewCart,
+  ) {
+    final bool itemIsInCart = isItemInCart(item);
+    itemIsInCart ? removeFromCart(item) : addToCart(item);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      itemIsInCart
+          ? SnackBar(
+              content: Text('\'${item.title}\' removed from cart'),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.red,
+            )
+          : SnackBar(
+              content: Text('\'${item.title}\' added to cart'),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.green,
+              action: SnackBarAction(
+                label: 'VIEW',
+                textColor: Colors.white,
+                onPressed: onViewCart,
+              ),
+            ),
+    );
+  }
 }

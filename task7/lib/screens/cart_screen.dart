@@ -97,7 +97,7 @@ class CartScreen extends StatelessWidget {
                       SnackBar(
                         content: Text('\'${item.title}\' removed from cart'),
                         duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.green.shade800,
+                        backgroundColor: Colors.red.shade800,
                       ),
                     );
                   }
@@ -180,7 +180,7 @@ class CartScreen extends StatelessWidget {
                         'Cart items have been deleted successfully!',
                       ),
                       duration: Duration(seconds: 2),
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.red,
                     ),
                   );
                 },

@@ -47,38 +47,11 @@ class FoodGridView extends StatelessWidget {
                     builder: (context, cartProvider, child) {
                       return AddToCartButton(
                         foodItem: item,
-                        onPressed: () {
-                          cartProvider.isItemInCart(item)
-                              ? cartProvider.removeFromCart(item)
-                              : cartProvider.addToCart(item);
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          cartProvider.isItemInCart(item)
-                              ? ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      '\'${item.title}\' added to cart',
-                                    ),
-                                    duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.green,
-                                    action: SnackBarAction(
-                                      label: 'VIEW',
-                                      textColor: Colors.white,
-                                      onPressed: () {
-                                        goToCart();
-                                      },
-                                    ),
-                                  ),
-                                )
-                              : ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      '\'${item.title}\' removed from cart',
-                                    ),
-                                    duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-                        },
+                        onPressed: () => cartProvider.toggleAddToCartButton(
+                          item,
+                          context,
+                          goToCart,
+                        ),
                       );
                     },
                   ),
