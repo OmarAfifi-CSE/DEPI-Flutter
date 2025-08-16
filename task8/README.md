@@ -1,16 +1,25 @@
-# task8
+## 📸 Showcase
+<table width="100%">
+<tr>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task8/assets/screenshots/1-%20Home.png" alt="Home" width="300">
+      </p>
+    </td>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task8/assets/screenshots/2-%20Watchlist.png" alt="Watchlist" width="300">
+      </p>
+    </td>
+  </tr>
 
-A new Flutter project.
+<tr>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task8/assets/screenshots/3-%20Movie%20Details.png" alt="Movie Details" width="300">
+      </p>
+    </td>
+  </tr>
+</table>
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
