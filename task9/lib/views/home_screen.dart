@@ -134,38 +134,31 @@ class HomeScreen extends StatelessWidget {
                   Consumer<CartController>(
                     builder: (context, cart, child) {
                       bool inCart = cart.isInCart(product);
-                      return Container(
-                        margin: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                          shape: BoxShape.circle,
+                      return IconButton(
+                        icon: Icon(
+                          inCart
+                              ? Icons.shopping_cart
+                              : Icons.add_shopping_cart,
+                          size: 20,
+                          color: inCart ? Colors.blue : AppColors.blackColor,
                         ),
-                        child: IconButton(
-                          icon: Icon(
-                            inCart
-                                ? Icons.shopping_cart
-                                : Icons.add_shopping_cart,
-                            size: 20,
-                            color: inCart ? Colors.blue : AppColors.blackColor,
-                          ),
-                          onPressed: () {
-                            inCart
-                                ? cart.removeItem(product.id!)
-                                : cart.addItem(product);
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: inCart
-                                    ? Text('${product.name} removed from cart')
-                                    : Text('${product.name} added to cart!'),
-                                duration: const Duration(seconds: 1),
-                                backgroundColor: inCart
-                                    ? Colors.red
-                                    : Colors.green,
-                              ),
-                            );
-                          },
-                        ),
+                        onPressed: () {
+                          inCart
+                              ? cart.removeItem(product.id!)
+                              : cart.addItem(product);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: inCart
+                                  ? Text('${product.name} removed from cart')
+                                  : Text('${product.name} added to cart!'),
+                              duration: const Duration(seconds: 1),
+                              backgroundColor: inCart
+                                  ? Colors.red
+                                  : Colors.green,
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

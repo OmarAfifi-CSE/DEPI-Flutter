@@ -8,8 +8,7 @@ import '../model/product.dart';
 class CartController extends ChangeNotifier {
   final Map<String?, CartItem> _items = {};
 
-  UnmodifiableMapView<String?, CartItem> get items =>
-      UnmodifiableMapView(_items);
+  Map<String?, CartItem> get items => _items;
 
   double get subtotal => _items.values.fold(
     0.0,
@@ -56,10 +55,5 @@ class CartController extends ChangeNotifier {
 
   bool isInCart(Product product) {
     return _items.containsKey(product.id);
-  }
-
-  void clearCart() {
-    _items.clear();
-    notifyListeners();
   }
 }
