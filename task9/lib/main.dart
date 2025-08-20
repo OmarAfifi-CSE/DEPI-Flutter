@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task9/routing/router_generation_config.dart';
+
+import 'controllers/cart_controller.dart';
+import 'controllers/product_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,10 +14,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'ShopSmart',
-      debugShowCheckedModeBanner: false,
-      routerConfig: RouterGenerationConfig.goRouter(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductController()),
+        ChangeNotifierProvider(create: (context) => CartController()),
+      ],
+      child: MaterialApp.router(
+        title: 'ShopSmart',
+        debugShowCheckedModeBanner: false,
+        routerConfig: RouterGenerationConfig.goRouter(),
+      ),
     );
   }
 }

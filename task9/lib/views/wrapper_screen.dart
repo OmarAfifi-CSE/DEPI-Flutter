@@ -39,7 +39,7 @@ class WrapperScreen extends StatelessWidget {
               ? IconButton(
                   icon: const Icon(Icons.shopping_cart_outlined, size: 24),
                   onPressed: () {
-                    // Implement search functionality here
+                    _onPageTapped(context, 1);
                   },
                   tooltip: 'Cart',
                 )

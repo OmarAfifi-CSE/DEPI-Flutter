@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:task9/views/cart_screen.dart';
 
 import '../views/home_screen.dart';
