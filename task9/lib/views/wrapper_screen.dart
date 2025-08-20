@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task9/styling/app_text_styles.dart';
 
+import '../routing/app_routes.dart';
 import '../styling/app_colors.dart';
 
 class WrapperScreen extends StatelessWidget {
@@ -20,7 +21,9 @@ class WrapperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         centerTitle: true,
@@ -31,13 +34,6 @@ class WrapperScreen extends StatelessWidget {
         backgroundColor: AppColors.whiteColor,
         foregroundColor: AppColors.blackColor,
         elevation: 0,
-        leading: navigationShell.currentIndex == 0
-            ? IconButton(
-                icon: const Icon(Icons.menu, size: 24),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                tooltip: 'Open menu',
-              )
-            : null,
         actions: [
           ?navigationShell.currentIndex == 0
               ? IconButton(
@@ -49,6 +45,42 @@ class WrapperScreen extends StatelessWidget {
                 )
               : null,
         ],
+      ),
+      drawer: Drawer(
+        backgroundColor: AppColors.whiteColor,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(color: AppColors.blueColor),
+              child: Text('Menu', style: AppTextStyles.whiteTextStyle),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home_outlined, size: 24),
+              title: const Text('Home'),
+              onTap: () {
+                _onPageTapped(context, 0);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart_outlined, size: 24),
+              title: const Text('Cart'),
+              onTap: () {
+                _onPageTapped(context, 1);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, size: 24),
+              title: const Text('Logout'),
+              onTap: () {
+                context.pushReplacementNamed(AppRoutes.signInScreen);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
