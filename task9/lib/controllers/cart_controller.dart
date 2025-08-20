@@ -55,7 +55,6 @@ class CartController extends ChangeNotifier {
   }
 
   bool isInCart(Product product) {
-    notifyListeners();
     return _items.containsKey(product.id);
   }
 

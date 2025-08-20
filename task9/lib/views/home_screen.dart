@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../controllers/cart_controller.dart';
 import '../controllers/product_controller.dart';
 import '../model/product.dart';
 import '../styling/app_colors.dart';
 import '../styling/app_text_styles.dart';
+import '../routing/app_routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -106,74 +108,90 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildProductCard(Product product, BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(color: AppColors.whiteColor),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(product.imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                Consumer<CartController>(
-                  builder: (context, cart, child) {
-                    bool inCart = cart.isInCart(product);
-                    return IconButton(
-                      icon: Icon(
-                        inCart ? Icons.shopping_cart : Icons.add_shopping_cart,
-                        size: 24,
-                        color: inCart
-                            ? AppColors.blackColor
-                            : AppColors.blackColor,
+    return GestureDetector(
+      onTap: () {
+        // Navigate to the product detail screen
+        context.pushNamed(AppRoutes.itemDetailScreen, extra: product);
+      },
+      child: Container(
+        decoration: const BoxDecoration(color: AppColors.whiteColor),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(product.imageUrl),
+                        fit: BoxFit.cover,
                       ),
-                      onPressed: () {
-                        inCart
-                            ? cart.removeItem(product.id!)
-                            : cart.addItem(product);
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: inCart
-                                ? Text('${product.name} removed from cart')
-                                : Text('${product.name} added to cart!'),
-                            duration: const Duration(seconds: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  Consumer<CartController>(
+                    builder: (context, cart, child) {
+                      bool inCart = cart.isInCart(product);
+                      return Container(
+                        margin: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            inCart
+                                ? Icons.shopping_cart
+                                : Icons.add_shopping_cart,
+                            size: 20,
+                            color: inCart ? Colors.blue : AppColors.blackColor,
                           ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+                          onPressed: () {
+                            inCart
+                                ? cart.removeItem(product.id!)
+                                : cart.addItem(product);
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: inCart
+                                    ? Text('${product.name} removed from cart')
+                                    : Text('${product.name} added to cart!'),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: inCart
+                                    ? Colors.red
+                                    : Colors.green,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.name,
-                  style: AppTextStyles.blackTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '\$${product.price.toStringAsFixed(2)}',
-                  style: AppTextStyles.subtitlesStyle,
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: AppTextStyles.blackTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '\$${product.price.toStringAsFixed(2)}',
+                    style: AppTextStyles.subtitlesStyle,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

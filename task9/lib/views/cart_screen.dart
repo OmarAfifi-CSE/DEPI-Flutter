@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../controllers/cart_controller.dart';
 import '../model/cart_item.dart';
 import '../styling/app_colors.dart';
 import '../styling/app_text_styles.dart';
+import '../routing/app_routes.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -47,43 +49,49 @@ class CartScreen extends StatelessWidget {
     CartItem cartItem,
     CartController cart,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(cartItem.product.imageUrl),
-                fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        // Navigate to the product detail screen
+        context.pushNamed(AppRoutes.itemDetailScreen, extra: cartItem.product);
+      },
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(cartItem.product.imageUrl),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              borderRadius: BorderRadius.circular(8.0),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  cartItem.product.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cartItem.product.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '\$${cartItem.product.price.toStringAsFixed(2)}',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    '\$${cartItem.product.price.toStringAsFixed(2)}',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
             ),
-          ),
-          _buildQuantityControl(cartItem, cart),
-        ],
+            _buildQuantityControl(cartItem, cart),
+          ],
+        ),
       ),
     );
   }
