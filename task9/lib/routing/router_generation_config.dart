@@ -8,7 +8,7 @@ import '../views/wrapper_screen.dart';
 import 'app_routes.dart';
 class RouterGenerationConfig {
   static GoRouter goRouter() => GoRouter(
-    initialLocation: AppRoutes.signInScreen,
+    initialLocation: AppRoutes.wrapperScreen,
     routes: [
       GoRoute(
         path: AppRoutes.signInScreen,

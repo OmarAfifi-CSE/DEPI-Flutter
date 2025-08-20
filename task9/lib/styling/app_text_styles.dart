@@ -42,7 +42,7 @@ class AppTextStyles {
   static const TextStyle blackTextStyle = TextStyle(
     color: AppColors.blackColor,
     fontFamily: AppFonts.mainFontName,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: FontWeight.w500,
   );
 }
