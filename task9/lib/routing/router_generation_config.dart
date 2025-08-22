@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:task9/views/cart_screen.dart';
+import 'package:task9/views/wishlist_screen.dart';
 
 import '../views/home_screen.dart';
 import '../views/signin_screen.dart';
@@ -7,9 +8,10 @@ import '../views/wrapper_screen.dart';
 import '../views/item_detail_screen.dart';
 import '../model/product.dart';
 import 'app_routes.dart';
+
 class RouterGenerationConfig {
   static GoRouter goRouter() => GoRouter(
-    initialLocation: AppRoutes.signInScreen,
+    initialLocation: AppRoutes.wrapperScreen,
     routes: [
       GoRoute(
         path: AppRoutes.signInScreen,
@@ -37,6 +39,15 @@ class RouterGenerationConfig {
                 path: AppRoutes.wrapperScreen,
                 name: AppRoutes.wrapperScreen,
                 builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.wishlistScreen,
+                name: AppRoutes.wishlistScreen,
+                builder: (context, state) => const WishlistScreen(),
               ),
             ],
           ),

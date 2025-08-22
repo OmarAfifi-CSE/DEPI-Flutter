@@ -10,6 +10,7 @@ class ProductController extends ChangeNotifier {
       name: 'Cozy Knit Sweater',
       description: 'A warm and stylish knit sweater perfect for winter.',
       price: 49.99,
+      rating: 4.5,
       imageUrl: AppAssets.product1,
       category: 'New',
     ),
@@ -18,6 +19,7 @@ class ProductController extends ChangeNotifier {
       name: 'Classic Leather Boots',
       description: 'Durable leather boots for everyday wear.',
       price: 129.99,
+      rating: 4.7,
       imageUrl: AppAssets.product2,
       category: 'Featured',
     ),
@@ -26,6 +28,7 @@ class ProductController extends ChangeNotifier {
       name: 'Minimalist Backpack',
       description: 'A sleek and functional backpack for daily use.',
       price: 79.99,
+      rating: 4.3,
       imageUrl: AppAssets.product3,
       category: 'All',
     ),
@@ -34,6 +37,7 @@ class ProductController extends ChangeNotifier {
       name: 'Urban Streetwear Jacket',
       description: 'A trendy jacket that combines style and comfort.',
       price: 89.99,
+      rating: 3.7,
       imageUrl: AppAssets.product4,
       category: 'Featured',
     ),
@@ -42,6 +46,7 @@ class ProductController extends ChangeNotifier {
       name: 'Vintage Denim Jeans',
       description: 'Classic denim jeans with a vintage wash.',
       price: 59.99,
+      rating: 3.5,
       imageUrl: AppAssets.product5,
       category: 'All',
     ),
@@ -50,6 +55,7 @@ class ProductController extends ChangeNotifier {
       name: 'Athletic Running Shoes',
       description: 'Lightweight running shoes for optimal performance.',
       price: 99.99,
+      rating: 4.8,
       imageUrl: AppAssets.product6,
       category: 'New',
     ),
@@ -77,7 +83,6 @@ class ProductController extends ChangeNotifier {
 
   void _applyFilters() {
     final query = _searchQuery.toLowerCase();
-
     _filteredProducts = _allProducts.where((product) {
       final nameMatches = product.name.toLowerCase().contains(query);
       final categoryMatches =

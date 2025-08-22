@@ -17,7 +17,7 @@ class WrapperScreen extends StatelessWidget {
     );
   }
 
-  static const List<String> _pageTitles = ['Home', 'Cart'];
+  static const List<String> _pageTitles = ['Home', 'Wishlist', 'Cart'];
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +64,29 @@ class WrapperScreen extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.shopping_cart_outlined, size: 24),
-              title: const Text('Cart'),
+              leading: const Icon(Icons.favorite_outline, size: 24),
+              title: const Text('Wishlist'),
               onTap: () {
                 _onPageTapped(context, 1);
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.logout, size: 24),
+              leading: const Icon(Icons.shopping_cart_outlined, size: 24),
+              title: const Text('Cart'),
+              onTap: () {
+                _onPageTapped(context, 2);
+                Navigator.pop(context);
+              },
+            ),
+            const Divider(
+              color: AppColors.greyColor,
+              thickness: 1,
+              indent: 16,
+              endIndent: 16,
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, size: 24, color: Colors.red),
               title: const Text('Logout'),
               onTap: () {
                 context.pushReplacementNamed(AppRoutes.signInScreen);
@@ -99,6 +113,11 @@ class WrapperScreen extends StatelessWidget {
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_outline),
+            activeIcon: Icon(Icons.favorite),
+            label: 'Wishlist',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart_outlined),

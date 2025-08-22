@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:task9/controllers/wishlist_controller.dart';
 
 import '../controllers/cart_controller.dart';
 import '../controllers/product_controller.dart';
@@ -8,6 +9,7 @@ import '../model/product.dart';
 import '../styling/app_colors.dart';
 import '../styling/app_text_styles.dart';
 import '../routing/app_routes.dart';
+import '../widgets/custom_snackbar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -110,7 +112,6 @@ class HomeScreen extends StatelessWidget {
   Widget _buildProductCard(Product product, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to the product detail screen
         context.pushNamed(AppRoutes.itemDetailScreen, extra: product);
       },
       child: Container(
@@ -131,32 +132,25 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  Consumer<CartController>(
-                    builder: (context, cart, child) {
-                      bool inCart = cart.isInCart(product);
+                  Consumer<WishlistController>(
+                    builder: (context, wishlist, child) {
+                      bool inWishlist = wishlist.isInWishlist(product);
                       return IconButton(
                         icon: Icon(
-                          inCart
-                              ? Icons.shopping_cart
-                              : Icons.add_shopping_cart,
-                          size: 20,
-                          color: inCart ? Colors.blue : AppColors.blackColor,
+                          inWishlist ? Icons.favorite : Icons.favorite_outline,
+                          size: 24,
+                          color: inWishlist ? Colors.red : AppColors.blackColor,
                         ),
                         onPressed: () {
-                          inCart
-                              ? cart.removeItem(product.id!)
-                              : cart.addItem(product);
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: inCart
-                                  ? Text('${product.name} removed from cart')
-                                  : Text('${product.name} added to cart!'),
-                              duration: const Duration(seconds: 1),
-                              backgroundColor: inCart
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
+                          inWishlist
+                              ? wishlist.removeFromWishlist(product)
+                              : wishlist.addToWishlist(product);
+                          CustomSnackBar.showSnackBar(
+                            context: context,
+                            message: inWishlist
+                                ? '${product.name} removed from wishlist!'
+                                : '${product.name} added to wishlist!',
+                            color: inWishlist ? Colors.red : Colors.green,
                           );
                         },
                       );

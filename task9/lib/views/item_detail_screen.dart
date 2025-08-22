@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task9/controllers/wishlist_controller.dart';
+import 'package:task9/styling/app_text_styles.dart';
 
 import '../controllers/cart_controller.dart';
 import '../model/product.dart';
 import '../styling/app_colors.dart';
-import '../styling/app_text_styles.dart';
 
 class ItemDetailScreen extends StatelessWidget {
   final Product product;
@@ -42,19 +43,17 @@ class ItemDetailScreen extends StatelessWidget {
   Widget _buildAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 400,
-      pinned: true,
       backgroundColor: AppColors.whiteColor,
       elevation: 0,
       leading: Container(
-        margin: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: AppColors.whiteColor,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: AppColors.blackColor.withValues(alpha: 0.1),
               blurRadius: 8,
-              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -67,26 +66,54 @@ class ItemDetailScreen extends StatelessWidget {
         Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
+            color: AppColors.whiteColor,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.blackColor.withValues(alpha: 0.1),
                 blurRadius: 8,
-                offset: const Offset(0, 2),
               ),
             ],
           ),
-          child: Consumer<CartController>(
-            builder: (context, cart, child) {
-              bool inCart = cart.isInCart(product);
+          child: Consumer<WishlistController>(
+            builder: (context, wishlist, child) {
+              bool inWishlist = wishlist.isInWishlist(product);
               return IconButton(
                 icon: Icon(
-                  inCart ? Icons.favorite : Icons.favorite_border,
-                  color: inCart ? Colors.red : AppColors.blackColor,
+                  inWishlist ? Icons.favorite : Icons.favorite_border,
+                  color: inWishlist ? Colors.red : AppColors.blackColor,
                 ),
                 onPressed: () {
-                  // You can implement wishlist functionality here
+                  inWishlist
+                      ? wishlist.removeFromWishlist(product)
+                      : wishlist.addToWishlist(product);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(
+                            inWishlist
+                                ? Icons.remove_circle
+                                : Icons.check_circle,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            inWishlist
+                                ? '${product.name} removed from wishlist'
+                                : '${product.name} added to wishlist!',
+                          ),
+                        ],
+                      ),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: inWishlist ? Colors.red : Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  );
                 },
               );
             },
@@ -108,7 +135,7 @@ class ItemDetailScreen extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.black.withOpacity(0.1),
+                  AppColors.blackColor.withValues(alpha: 0.1),
                 ],
               ),
             ),
@@ -140,11 +167,7 @@ class ItemDetailScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           product.name,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: AppColors.blackColor,
-          ),
+          style: AppTextStyles.primaryHeadlineStyle.copyWith(fontSize: 28),
         ),
         const SizedBox(height: 8),
         Row(
@@ -161,7 +184,7 @@ class ItemDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.1),
+                color: Colors.green.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Text(
@@ -178,18 +201,27 @@ class ItemDetailScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Row(
           children: [
-            ...List.generate(5, (index) => Icon(
-              Icons.star,
-              color: index < 4 ? Colors.amber : Colors.grey[300],
-              size: 20,
-            )),
+            ...List.generate(5, (index) {
+              if (index < product.rating.floor()) {
+                return const Icon(Icons.star, color: Colors.amber, size: 20);
+              } else if (index < product.rating) {
+                return const Icon(
+                  Icons.star_half,
+                  color: Colors.amber,
+                  size: 20,
+                );
+              } else {
+                return const Icon(
+                  Icons.star,
+                  color: AppColors.greyColor,
+                  size: 20,
+                );
+              }
+            }),
             const SizedBox(width: 8),
             Text(
-              '4.5 (128 reviews)',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 14,
-              ),
+              '${product.rating} (128 reviews)',
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
           ],
         ),
@@ -212,11 +244,7 @@ class ItemDetailScreen extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           product.description,
-          style: TextStyle(
-            fontSize: 16,
-            height: 1.6,
-            color: Colors.grey[700],
-          ),
+          style: TextStyle(fontSize: 16, height: 1.6, color: Colors.grey[700]),
         ),
         const SizedBox(height: 20),
         _buildFeatures(),
@@ -226,9 +254,21 @@ class ItemDetailScreen extends StatelessWidget {
 
   Widget _buildFeatures() {
     final features = [
-      {'icon': Icons.local_shipping, 'title': 'Free Shipping', 'subtitle': 'On orders over \$50'},
-      {'icon': Icons.refresh, 'title': 'Easy Returns', 'subtitle': '30-day return policy'},
-      {'icon': Icons.security, 'title': 'Secure Payment', 'subtitle': 'SSL encrypted checkout'},
+      {
+        'icon': Icons.local_shipping,
+        'title': 'Free Shipping',
+        'subtitle': 'On orders over \$50',
+      },
+      {
+        'icon': Icons.refresh,
+        'title': 'Easy Returns',
+        'subtitle': '30-day return policy',
+      },
+      {
+        'icon': Icons.security,
+        'title': 'Secure Payment',
+        'subtitle': 'SSL encrypted checkout',
+      },
     ];
 
     return Column(
@@ -243,47 +283,46 @@ class ItemDetailScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...features.map((feature) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+        ...features.map(
+          (feature) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    feature['icon'] as IconData,
+                    color: Colors.blue,
+                    size: 20,
+                  ),
                 ),
-                child: Icon(
-                  feature['icon'] as IconData,
-                  color: Colors.blue,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      feature['title'] as String,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        feature['title'] as String,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                    Text(
-                      feature['subtitle'] as String,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
+                      Text(
+                        feature['subtitle'] as String,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -295,18 +334,20 @@ class ItemDetailScreen extends StatelessWidget {
         final cartItem = cart.items[product.id];
 
         return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
+          padding: inCart ? const EdgeInsets.all(20) : EdgeInsets.zero,
+          decoration: inCart
+              ? BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.blackColor.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                )
+              : null,
           child: Column(
             children: [
               if (inCart) ...[
@@ -353,16 +394,24 @@ class ItemDetailScreen extends StatelessWidget {
                 const SizedBox(height: 16),
               ],
               SizedBox(
-                width: double.infinity,
+                width: MediaQuery.sizeOf(context).width,
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
                     if (inCart) {
                       cart.removeItem(product.id!);
-                      _showSnackBar(context, '${product.name} removed from cart', Colors.red);
+                      _showSnackBar(
+                        context,
+                        '${product.name} removed from cart',
+                        Colors.red,
+                      );
                     } else {
                       cart.addItem(product);
-                      _showSnackBar(context, '${product.name} added to cart!', Colors.green);
+                      _showSnackBar(
+                        context,
+                        '${product.name} added to cart!',
+                        Colors.green,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -377,7 +426,9 @@ class ItemDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        inCart ? Icons.remove_shopping_cart : Icons.add_shopping_cart,
+                        inCart
+                            ? Icons.remove_shopping_cart
+                            : Icons.add_shopping_cart,
                         size: 24,
                       ),
                       const SizedBox(width: 8),
@@ -435,9 +486,7 @@ class ItemDetailScreen extends StatelessWidget {
         backgroundColor: color,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }

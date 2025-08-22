@@ -7,6 +7,7 @@ import '../model/cart_item.dart';
 import '../styling/app_colors.dart';
 import '../styling/app_text_styles.dart';
 import '../routing/app_routes.dart';
+import '../widgets/custom_empty_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -18,11 +19,9 @@ class CartScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.whiteColor,
           body: cart.items.isEmpty
-              ? const Center(
-                  child: Text(
-                    'Your cart is empty.',
-                    style: AppTextStyles.hintTextStyle,
-                  ),
+              ? const CustomEmptyScreen(
+                  screenName: 'Cart',
+                  iconData: Icons.shopping_cart_outlined,
                 )
               : Column(
                   children: [
@@ -51,7 +50,6 @@ class CartScreen extends StatelessWidget {
   ) {
     return GestureDetector(
       onTap: () {
-        // Navigate to the product detail screen
         context.pushNamed(AppRoutes.itemDetailScreen, extra: cartItem.product);
       },
       child: Container(
