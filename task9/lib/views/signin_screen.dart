@@ -40,81 +40,83 @@ class _SigninScreenState extends State<SigninScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            Image.asset(AppAssets.signinImage, height: 220, fit: BoxFit.cover),
-            const SizedBox(height: 20),
-            const Text('ShopSmart', style: AppTextStyles.primaryHeadlineStyle),
-            const SizedBox(height: 24),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  CustomTextFormField(
-                    hintText: 'Email',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      } else if (!isEmailValid(value)) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  CustomTextFormField(
-                    hintText: 'Password',
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      } else if (value.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.blueColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              Image.asset(AppAssets.signinImage, height: 220, fit: BoxFit.cover),
+              const SizedBox(height: 20),
+              const Text('ShopSmart', style: AppTextStyles.primaryHeadlineStyle),
+              const SizedBox(height: 24),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomTextFormField(
+                      hintText: 'Email',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        } else if (!isEmailValid(value)) {
+                          return 'Please enter a valid email address';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    CustomTextFormField(
+                      hintText: 'Password',
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        } else if (value.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.blueColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      fixedSize: Size(MediaQuery.sizeOf(context).width, 48),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      onPressed: () {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          context.pushNamed(AppRoutes.wrapperScreen);
+                        }
+                      },
+                      child: const Text(
+                        'Login',
+                        style: AppTextStyles.buttonTextStyle,
+                      ),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        context.pushNamed(AppRoutes.wrapperScreen);
-                      }
-                    },
-                    child: const Text(
-                      'Login',
-                      style: AppTextStyles.buttonTextStyle,
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Forgot Password?',
+                        style: AppTextStyles.hintTextStyle,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Forgot Password?',
-                      style: AppTextStyles.hintTextStyle,
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Sign Up',
+                        style: AppTextStyles.hintTextStyle,
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Sign Up',
-                      style: AppTextStyles.hintTextStyle,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

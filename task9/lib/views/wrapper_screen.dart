@@ -32,6 +32,7 @@ class WrapperScreen extends StatelessWidget {
           style: AppTextStyles.primaryHeadlineStyle.copyWith(fontSize: 18),
         ),
         backgroundColor: AppColors.whiteColor,
+        scrolledUnderElevation: 0,
         foregroundColor: AppColors.blackColor,
         elevation: 0,
         actions: [

@@ -47,7 +47,7 @@ class WishlistScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 3 / 4,
+                childAspectRatio: 6 / 8,
               ),
               itemCount: wishlistController.wishlist.length,
               itemBuilder: (context, index) {
@@ -112,7 +112,8 @@ class WishlistScreen extends StatelessWidget {
                     top: 4,
                     right: 4,
                     child: Container(
-                      width: 40,
+                      width: 35,
+                      height: 35,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
@@ -128,7 +129,7 @@ class WishlistScreen extends StatelessWidget {
                         icon: const Icon(
                           Icons.favorite,
                           color: Colors.red,
-                          size: 20,
+                          size: 22,
                         ),
                         onPressed: () {
                           wishlistController.removeFromWishlist(product);
@@ -148,7 +149,8 @@ class WishlistScreen extends StatelessWidget {
                       builder: (context, cart, child) {
                         bool inCart = cart.isInCart(product);
                         return Container(
-                          width: 40,
+                          width: 35,
+                          height: 35,
                           decoration: BoxDecoration(
                             color: inCart ? Colors.blue : Colors.white,
                             shape: BoxShape.circle,
@@ -218,14 +220,6 @@ class WishlistScreen extends StatelessWidget {
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        product.category.toUpperCase(),
-                        style: AppTextStyles.subtitlesStyle.copyWith(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
                       ),
                       const Spacer(),
                       Row(

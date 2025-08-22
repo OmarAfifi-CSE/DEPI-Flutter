@@ -9,22 +9,24 @@ class CustomSnackBar {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              color == Colors.green
-                  ? Icons.check_circle
-                  : color == Colors.red
-                  ? Icons.remove_circle
-                  : Icons.info,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 8),
-            Text(message),
-          ],
+        content: FittedBox(
+          child: Row(
+            children: [
+              Icon(
+                color == Colors.green
+                    ? Icons.check_circle
+                    : color == Colors.red
+                    ? Icons.remove_circle
+                    : Icons.info,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 8),
+              Text(message, style: const TextStyle(fontSize: 14)),
+            ],
+          ),
         ),
         backgroundColor: color,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),

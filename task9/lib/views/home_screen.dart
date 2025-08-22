@@ -20,12 +20,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSearchBar(productController),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
             _buildFilterTabs(context, productController),
             const SizedBox(height: 20),
             _buildProductGrid(productController),
@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+        contentPadding: const EdgeInsets.all(0),
       ),
     );
   }
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => controller.updateSelectedTab(title),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? Colors.grey[800] : AppColors.greyColor,
           borderRadius: BorderRadius.circular(8),
@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 3 / 4,
+          childAspectRatio: 6 / 8,
         ),
         itemCount: controller.filteredProducts.length,
         itemBuilder: (context, index) {
@@ -135,24 +135,46 @@ class HomeScreen extends StatelessWidget {
                   Consumer<WishlistController>(
                     builder: (context, wishlist, child) {
                       bool inWishlist = wishlist.isInWishlist(product);
-                      return IconButton(
-                        icon: Icon(
-                          inWishlist ? Icons.favorite : Icons.favorite_outline,
-                          size: 24,
-                          color: inWishlist ? Colors.red : AppColors.blackColor,
+                      return Container(
+                        margin: const EdgeInsets.all(4),
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.blackColor.withValues(
+                                alpha: 0.1,
+                              ),
+                              blurRadius: 4,
+                            ),
+                          ],
                         ),
-                        onPressed: () {
-                          inWishlist
-                              ? wishlist.removeFromWishlist(product)
-                              : wishlist.addToWishlist(product);
-                          CustomSnackBar.showSnackBar(
-                            context: context,
-                            message: inWishlist
-                                ? '${product.name} removed from wishlist!'
-                                : '${product.name} added to wishlist!',
-                            color: inWishlist ? Colors.red : Colors.green,
-                          );
-                        },
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            inWishlist
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            size: 22,
+                            color: inWishlist
+                                ? Colors.red
+                                : AppColors.blackColor,
+                          ),
+                          onPressed: () {
+                            inWishlist
+                                ? wishlist.removeFromWishlist(product)
+                                : wishlist.addToWishlist(product);
+                            CustomSnackBar.showSnackBar(
+                              context: context,
+                              message: inWishlist
+                                  ? '${product.name} removed from wishlist!'
+                                  : '${product.name} added to wishlist!',
+                              color: inWishlist ? Colors.red : Colors.green,
+                            );
+                          },
+                        ),
                       );
                     },
                   ),

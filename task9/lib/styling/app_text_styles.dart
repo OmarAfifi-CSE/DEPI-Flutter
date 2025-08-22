@@ -14,7 +14,7 @@ class AppTextStyles {
   static const TextStyle subtitlesStyle = TextStyle(
     color: AppColors.secondaryColor,
     fontFamily: AppFonts.mainFontName,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.w400,
   );
 
@@ -42,7 +42,7 @@ class AppTextStyles {
   static const TextStyle blackTextStyle = TextStyle(
     color: AppColors.blackColor,
     fontFamily: AppFonts.mainFontName,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: FontWeight.w500,
   );
 }

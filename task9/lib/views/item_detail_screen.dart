@@ -6,6 +6,7 @@ import 'package:task9/styling/app_text_styles.dart';
 import '../controllers/cart_controller.dart';
 import '../model/product.dart';
 import '../styling/app_colors.dart';
+import '../widgets/custom_snackbar.dart';
 
 class ItemDetailScreen extends StatelessWidget {
   final Product product;
@@ -16,26 +17,28 @@ class ItemDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(context),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProductInfo(),
-                  const SizedBox(height: 24),
-                  _buildDescription(),
-                  const SizedBox(height: 32),
-                  _buildAddToCartSection(context),
-                  const SizedBox(height: 20),
-                ],
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            _buildAppBar(context),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildProductInfo(),
+                    const SizedBox(height: 24),
+                    _buildDescription(),
+                    const SizedBox(height: 32),
+                    _buildAddToCartSection(context),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -87,32 +90,12 @@ class ItemDetailScreen extends StatelessWidget {
                   inWishlist
                       ? wishlist.removeFromWishlist(product)
                       : wishlist.addToWishlist(product);
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Row(
-                        children: [
-                          Icon(
-                            inWishlist
-                                ? Icons.remove_circle
-                                : Icons.check_circle,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            inWishlist
-                                ? '${product.name} removed from wishlist'
-                                : '${product.name} added to wishlist!',
-                          ),
-                        ],
-                      ),
-                      duration: const Duration(seconds: 1),
-                      backgroundColor: inWishlist ? Colors.red : Colors.green,
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
+                  CustomSnackBar.showSnackBar(
+                    context: context,
+                    message: inWishlist
+                        ? '${product.name} removed from wishlist!'
+                        : '${product.name} added to wishlist!',
+                    color: inWishlist ? Colors.red : Colors.green,
                   );
                 },
               );
@@ -400,17 +383,17 @@ class ItemDetailScreen extends StatelessWidget {
                   onPressed: () {
                     if (inCart) {
                       cart.removeItem(product.id!);
-                      _showSnackBar(
-                        context,
-                        '${product.name} removed from cart',
-                        Colors.red,
+                      CustomSnackBar.showSnackBar(
+                        context: context,
+                        message: '${product.name} removed from cart',
+                        color: Colors.red,
                       );
                     } else {
                       cart.addItem(product);
-                      _showSnackBar(
-                        context,
-                        '${product.name} added to cart!',
-                        Colors.green,
+                      CustomSnackBar.showSnackBar(
+                        context: context,
+                        message: '${product.name} added to cart!',
+                        color: Colors.green,
                       );
                     }
                   },
@@ -465,28 +448,6 @@ class ItemDetailScreen extends StatelessWidget {
         padding: EdgeInsets.zero,
         icon: Icon(icon, size: 18),
         onPressed: onPressed,
-      ),
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              color == Colors.green ? Icons.check_circle : Icons.remove_circle,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 8),
-            Text(message),
-          ],
-        ),
-        backgroundColor: color,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }
