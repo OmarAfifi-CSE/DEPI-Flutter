@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => WishlistController()),
       ],
       child: MaterialApp.router(
-        title: 'ShopSmart',
+        title: 'SHOPSMART',
         debugShowCheckedModeBanner: false,
         routerConfig: RouterGenerationConfig.goRouter(),
       ),

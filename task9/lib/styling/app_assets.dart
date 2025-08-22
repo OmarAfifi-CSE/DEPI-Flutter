@@ -1,5 +1,5 @@
 class AppAssets {
-  static const String signinImage = 'assets/images/ShopSmart.png';
+  static const String signinImage = 'assets/images/2.png';
   // Products images
   static const String product1 = 'assets/images/Textured Camp Collar Shirt.jpg';
   static const String product2 = 'assets/images/Structured Knit Polo Shirt.jpg';
