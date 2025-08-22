@@ -4,6 +4,7 @@ import 'package:task9/styling/app_text_styles.dart';
 
 import '../routing/app_routes.dart';
 import '../styling/app_colors.dart';
+import '../widgets/logout_dialog.dart';
 
 class WrapperScreen extends StatelessWidget {
   const WrapperScreen({super.key, required this.navigationShell});
@@ -17,7 +18,12 @@ class WrapperScreen extends StatelessWidget {
     );
   }
 
-  static const List<String> _pageTitles = ['Home', 'Wishlist', 'Cart'];
+  static const List<String> _pageTitles = [
+    'Home',
+    'Wishlist',
+    'Cart',
+    'Profile',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +86,14 @@ class WrapperScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.person_outline, size: 24),
+              title: const Text('Profile'),
+              onTap: () {
+                _onPageTapped(context, 3);
+                Navigator.pop(context);
+              },
+            ),
             const Divider(
               color: AppColors.greyColor,
               thickness: 1,
@@ -88,10 +102,9 @@ class WrapperScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.logout, size: 24, color: Colors.red),
-              title: const Text('Logout'),
+              title: const Text('Log Out'),
               onTap: () {
-                context.pushReplacementNamed(AppRoutes.signInScreen);
-                Navigator.pop(context);
+                LogoutDialog.showLogoutDialog(context);
               },
             ),
           ],
@@ -99,6 +112,7 @@ class WrapperScreen extends StatelessWidget {
       ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: navigationShell.currentIndex,
         onTap: (int index) {
           _onPageTapped(context, index);
@@ -124,6 +138,11 @@ class WrapperScreen extends StatelessWidget {
             icon: Icon(Icons.shopping_cart_outlined),
             activeIcon: Icon(Icons.shopping_cart),
             label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),

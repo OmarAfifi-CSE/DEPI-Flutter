@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:task9/views/cart_screen.dart';
 import 'package:task9/views/wishlist_screen.dart';
+import 'package:task9/views/profile_screen.dart';
 
 import '../views/home_screen.dart';
 import '../views/signin_screen.dart';
@@ -57,6 +58,15 @@ class RouterGenerationConfig {
                 path: AppRoutes.cartScreen,
                 name: AppRoutes.cartScreen,
                 builder: (context, state) => const CartScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profileScreen,
+                name: AppRoutes.profileScreen,
+                builder: (context, state) => const ProfileScreen(),
               ),
             ],
           ),

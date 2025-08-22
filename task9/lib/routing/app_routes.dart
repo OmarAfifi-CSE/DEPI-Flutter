@@ -4,5 +4,5 @@ class AppRoutes {
   static const String wishlistScreen = '/wishlist';
   static const String cartScreen = '/cart';
   static const String profileScreen = '/profile';
-  static const String itemDetailScreen = '/item-detail';
+  static const String itemDetailScreen = '/item-details';
 }
