@@ -34,13 +34,13 @@ class CustomEmptyScreen extends StatelessWidget {
             const SizedBox(height: 32),
             Text(
               'Your $screenName is Empty',
-              style: AppTextStyles.primaryHeadlineStyle.copyWith(fontSize: 26),
+              style: AppTextStyles.primaryHeadlineStyle.copyWith(fontSize: 24),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Text(
-              'Discover amazing products and add them to your $screenName.',
-              style: AppTextStyles.subtitlesStyle.copyWith(fontSize: 16),
+              _getEmptyMessage(screenName),
+              style: AppTextStyles.subtitlesStyle.copyWith(fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
@@ -49,7 +49,7 @@ class CustomEmptyScreen extends StatelessWidget {
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  context.go('/home');
+                  context.go('/');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -79,5 +79,16 @@ class CustomEmptyScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getEmptyMessage(String screenName) {
+    switch (screenName.toLowerCase()) {
+      case 'wishlist':
+        return 'Discover amazing products and add them to your wishlist to save for later!';
+      case 'cart':
+        return 'Add some products to your cart to get started with your shopping!';
+      default:
+        return 'Start exploring our amazing products!';
+    }
   }
 }

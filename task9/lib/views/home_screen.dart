@@ -192,9 +192,27 @@ class HomeScreen extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-                    style: AppTextStyles.subtitlesStyle,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\$${product.price.toStringAsFixed(2)}',
+                        style: AppTextStyles.subtitlesStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Icon(Icons.star, size: 16, color: Colors.amber),
+                          const SizedBox(width: 2),
+                          Text(
+                            product.rating.toStringAsFixed(1),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
