@@ -17,65 +17,73 @@ class CustomEmptyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: AppColors.greyColor.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(iconData, size: 60, color: AppColors.secondaryColor),
-            ),
-            const SizedBox(height: 32),
-            Text(
-              'Your $screenName is Empty',
-              style: AppTextStyles.primaryHeadlineStyle.copyWith(fontSize: 24),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              _getEmptyMessage(screenName),
-              style: AppTextStyles.subtitlesStyle.copyWith(fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {
-                  context.go('/');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 2,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: AppColors.greyColor.withValues(alpha: 0.3),
+                  shape: BoxShape.circle,
                 ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.shopping_bag_outlined, size: 24),
-                    SizedBox(width: 12),
-                    Text(
-                      'Start Shopping',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                child: Icon(
+                  iconData,
+                  size: 60,
+                  color: AppColors.secondaryColor,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Text(
+                'Your $screenName is Empty',
+                style: AppTextStyles.primaryHeadlineStyle.copyWith(
+                  fontSize: 24,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                _getEmptyMessage(screenName),
+                style: AppTextStyles.subtitlesStyle.copyWith(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.go('/home');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                  ],
+                    elevation: 2,
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.shopping_bag_outlined, size: 24),
+                      SizedBox(width: 12),
+                      Text(
+                        'Start Shopping',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

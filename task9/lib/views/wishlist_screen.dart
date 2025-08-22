@@ -78,7 +78,7 @@ class WishlistScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 3,
+              flex: 9,
               child: Stack(
                 children: [
                   Container(
@@ -200,7 +200,7 @@ class WishlistScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 5,
               child: Container(
                 decoration: const BoxDecoration(
                   color: AppColors.whiteColor,
@@ -221,14 +221,13 @@ class WishlistScreen extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const Spacer(),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             '\$${product.price.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: AppTextStyles.subtitlesStyle.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.blue,
                             ),

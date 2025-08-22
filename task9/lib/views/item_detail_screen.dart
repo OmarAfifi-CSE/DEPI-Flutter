@@ -260,7 +260,7 @@ class ItemDetailScreen extends StatelessWidget {
         const Text(
           'Features',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: AppColors.blackColor,
           ),
@@ -292,12 +292,12 @@ class ItemDetailScreen extends StatelessWidget {
                         feature['title'] as String,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
                       Text(
                         feature['subtitle'] as String,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       ),
                     ],
                   ),

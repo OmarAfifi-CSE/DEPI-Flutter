@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../controllers/cart_controller.dart';
 import '../model/cart_item.dart';
 import '../styling/app_colors.dart';
-import '../styling/app_text_styles.dart';
 import '../routing/app_routes.dart';
 import '../widgets/custom_empty_screen.dart';
 
@@ -145,7 +144,7 @@ class CartScreen extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 0,
             blurRadius: 10,
             offset: const Offset(0, -5),

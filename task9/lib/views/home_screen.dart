@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task9/controllers/wishlist_controller.dart';
 
-import '../controllers/cart_controller.dart';
 import '../controllers/product_controller.dart';
 import '../model/product.dart';
 import '../styling/app_colors.dart';

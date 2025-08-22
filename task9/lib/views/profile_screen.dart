@@ -89,13 +89,20 @@ class ProfileScreen extends StatelessWidget {
         ),
         gradient: LinearGradient(
           colors: [
-            AppColors.blueColor,
-            AppColors.blueColor.withValues(alpha: 0.8),
-            AppColors.blueColor.withValues(alpha: 0.6),
+            AppColors.whiteColor,
+            AppColors.whiteColor.withValues(alpha: 0.8),
+            AppColors.whiteColor.withValues(alpha: 0.6),
           ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
