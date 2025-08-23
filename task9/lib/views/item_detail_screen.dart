@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:task9/controllers/wishlist_controller.dart';
 import 'package:task9/styling/app_text_styles.dart';
@@ -10,8 +11,13 @@ import '../widgets/custom_snackbar.dart';
 
 class ItemDetailScreen extends StatelessWidget {
   final Product product;
+  final String heroTag;
 
-  const ItemDetailScreen({super.key, required this.product});
+  const ItemDetailScreen({
+    super.key,
+    required this.product,
+    required this.heroTag,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +74,8 @@ class ItemDetailScreen extends StatelessWidget {
       actions: [
         Container(
           margin: const EdgeInsets.all(8.0),
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
             color: AppColors.whiteColor,
             shape: BoxShape.circle,
@@ -81,22 +89,32 @@ class ItemDetailScreen extends StatelessWidget {
           child: Consumer<WishlistController>(
             builder: (context, wishlist, child) {
               bool inWishlist = wishlist.isInWishlist(product);
-              return IconButton(
-                icon: Icon(
-                  inWishlist ? Icons.favorite : Icons.favorite_border,
-                  color: inWishlist ? Colors.red : AppColors.blackColor,
-                ),
-                onPressed: () {
-                  inWishlist
-                      ? wishlist.removeFromWishlist(product)
-                      : wishlist.addToWishlist(product);
-                  CustomSnackBar.showSnackBar(
-                    context: context,
-                    message: inWishlist
-                        ? '${product.name} removed from wishlist!'
-                        : '${product.name} added to wishlist!',
-                    color: inWishlist ? Colors.red : Colors.green,
+              return LikeButton(
+                likeCountPadding: EdgeInsets.zero,
+                isLiked: inWishlist,
+                likeBuilder: (bool isLiked) {
+                  return Icon(
+                    isLiked ? Icons.favorite : Icons.favorite_outline,
+                    color: isLiked ? Colors.red : AppColors.blackColor,
                   );
+                },
+                onTap: (bool isLiked) async {
+                  if (isLiked) {
+                    wishlist.removeFromWishlist(product);
+                    CustomSnackBar.showSnackBar(
+                      context: context,
+                      message: '${product.name} removed from wishlist!',
+                      color: Colors.red,
+                    );
+                  } else {
+                    wishlist.addToWishlist(product);
+                    CustomSnackBar.showSnackBar(
+                      context: context,
+                      message: '${product.name} added to wishlist!',
+                      color: Colors.green,
+                    );
+                  }
+                  return !isLiked;
                 },
               );
             },
@@ -104,22 +122,25 @@ class ItemDetailScreen extends StatelessWidget {
         ),
       ],
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(product.imageUrl),
-              fit: BoxFit.cover,
-            ),
-          ),
+        background: Hero(
+          tag: heroTag,
           child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  AppColors.blackColor.withValues(alpha: 0.1),
-                ],
+              image: DecorationImage(
+                image: AssetImage(product.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    AppColors.blackColor.withValues(alpha: 0.1),
+                  ],
+                ),
               ),
             ),
           ),

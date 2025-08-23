@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task9/controllers/wishlist_controller.dart';
@@ -73,18 +74,22 @@ class HomeScreen extends StatelessWidget {
     final isSelected = controller.selectedTab == title;
     return GestureDetector(
       onTap: () => controller.updateSelectedTab(title),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? Colors.grey[800] : AppColors.greyColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          title,
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black,
             fontWeight: FontWeight.w500,
           ),
+          child: Text(title),
         ),
       ),
     );
@@ -92,26 +97,43 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildProductGrid(ProductController controller) {
     return Expanded(
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 6 / 8,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: GridView.builder(
+          key: ValueKey(controller.selectedTab),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 6 / 8,
+          ),
+          itemCount: controller.filteredProducts.length,
+          itemBuilder: (context, index) {
+            final product = controller.filteredProducts[index];
+            return _buildProductCard(
+              product,
+              context,
+              key: ValueKey(product.id),
+            );
+          },
         ),
-        itemCount: controller.filteredProducts.length,
-        itemBuilder: (context, index) {
-          final product = controller.filteredProducts[index];
-          return _buildProductCard(product, context);
-        },
       ),
     );
   }
 
-  Widget _buildProductCard(Product product, BuildContext context) {
+  Widget _buildProductCard(
+    Product product,
+    BuildContext context, {
+    required Key key,
+  }) {
+    const String prefix = 'home_page';
     return GestureDetector(
+      key: key,
       onTap: () {
-        context.pushNamed(AppRoutes.itemDetailScreen, extra: product);
+        context.pushNamed(
+          AppRoutes.itemDetailScreen,
+          extra: {'product': product, 'prefix': prefix},
+        );
       },
       child: Container(
         decoration: const BoxDecoration(color: AppColors.whiteColor),
@@ -122,19 +144,23 @@ class HomeScreen extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.topRight,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(product.imageUrl),
-                        fit: BoxFit.cover,
+                  Hero(
+                    tag: '${prefix}_${product.id!}',
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(product.imageUrl),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   Consumer<WishlistController>(
                     builder: (context, wishlist, child) {
                       bool inWishlist = wishlist.isInWishlist(product);
                       return Container(
+                        alignment: Alignment.center,
                         margin: const EdgeInsets.all(4),
                         width: 35,
                         height: 35,
@@ -150,28 +176,36 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(
-                            inWishlist
-                                ? Icons.favorite
-                                : Icons.favorite_outline,
-                            size: 22,
-                            color: inWishlist
-                                ? Colors.red
-                                : AppColors.blackColor,
-                          ),
-                          onPressed: () {
-                            inWishlist
-                                ? wishlist.removeFromWishlist(product)
-                                : wishlist.addToWishlist(product);
-                            CustomSnackBar.showSnackBar(
-                              context: context,
-                              message: inWishlist
-                                  ? '${product.name} removed from wishlist!'
-                                  : '${product.name} added to wishlist!',
-                              color: inWishlist ? Colors.red : Colors.green,
+                        child: LikeButton(
+                          likeCountPadding: EdgeInsets.zero,
+                          isLiked: inWishlist,
+                          likeBuilder: (bool isLiked) {
+                            return Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_outline,
+                              color: isLiked
+                                  ? Colors.red
+                                  : AppColors.blackColor,
+                              size: 22,
                             );
+                          },
+                          onTap: (bool isLiked) async {
+                            if (isLiked) {
+                              wishlist.removeFromWishlist(product);
+                              CustomSnackBar.showSnackBar(
+                                context: context,
+                                message:
+                                    '${product.name} removed from wishlist!',
+                                color: Colors.red,
+                              );
+                            } else {
+                              wishlist.addToWishlist(product);
+                              CustomSnackBar.showSnackBar(
+                                context: context,
+                                message: '${product.name} added to wishlist!',
+                                color: Colors.green,
+                              );
+                            }
+                            return !isLiked;
                           },
                         ),
                       );

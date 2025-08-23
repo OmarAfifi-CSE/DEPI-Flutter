@@ -12,7 +12,7 @@ import 'app_routes.dart';
 
 class RouterGenerationConfig {
   static GoRouter goRouter() => GoRouter(
-    initialLocation: AppRoutes.signInScreen,
+    initialLocation: AppRoutes.wrapperScreen,
     routes: [
       GoRoute(
         path: AppRoutes.signInScreen,
@@ -24,8 +24,12 @@ class RouterGenerationConfig {
         path: AppRoutes.itemDetailScreen,
         name: AppRoutes.itemDetailScreen,
         builder: (context, state) {
-          final product = state.extra as Product;
-          return ItemDetailScreen(product: product);
+          // Cast 'extra' to a Map
+          final args = state.extra as Map<String, dynamic>;
+          final product = args['product'] as Product;
+          final prefix = args['prefix'] as String;
+          final uniqueTag = '${prefix}_${product.id}';
+          return ItemDetailScreen(product: product, heroTag: uniqueTag);
         },
       ),
 

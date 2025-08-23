@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task9/widgets/custom_empty_screen.dart';
@@ -66,13 +67,18 @@ class WishlistScreen extends StatelessWidget {
     Product product,
     WishlistController wishlistController,
   ) {
+    const String prefix = 'wishlist_page';
     return Card(
+      key: ValueKey(product.id),
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          context.pushNamed(AppRoutes.itemDetailScreen, extra: product);
+          context.pushNamed(
+            AppRoutes.itemDetailScreen,
+            extra: {'product': product, 'prefix': prefix},
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,15 +87,18 @@ class WishlistScreen extends StatelessWidget {
               flex: 9,
               child: Stack(
                 children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(16),
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(product.imageUrl),
-                        fit: BoxFit.cover,
+                  Hero(
+                    tag: '${prefix}_${product.id!}',
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage(product.imageUrl),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -124,20 +133,26 @@ class WishlistScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: IconButton(
-                        padding: const EdgeInsets.all(0),
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                          size: 22,
-                        ),
-                        onPressed: () {
-                          wishlistController.removeFromWishlist(product);
-                          CustomSnackBar.showSnackBar(
-                            context: context,
-                            message: '${product.name} removed from wishlist',
-                            color: Colors.red,
+                      child: LikeButton(
+                        likeCountPadding: EdgeInsets.zero,
+                        isLiked: wishlistController.isInWishlist(product),
+                        likeBuilder: (bool isLiked) {
+                          return Icon(
+                            isLiked ? Icons.favorite : Icons.favorite_outline,
+                            color: isLiked ? Colors.red : AppColors.blackColor,
+                            size: 22,
                           );
+                        },
+                        onTap: (bool isLiked) async {
+                          if (isLiked) {
+                            wishlistController.removeFromWishlist(product);
+                            CustomSnackBar.showSnackBar(
+                              context: context,
+                              message: '${product.name} removed from wishlist!',
+                              color: Colors.red,
+                            );
+                          }
+                          return !isLiked;
                         },
                       ),
                     ),
@@ -163,18 +178,25 @@ class WishlistScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            icon: Icon(
-                              inCart
-                                  ? Icons.remove_shopping_cart
-                                  : Icons.add_shopping_cart,
-                              color: inCart
-                                  ? Colors.white
-                                  : AppColors.blackColor,
-                              size: 20,
+                          child: LikeButton(
+                            likeCountPadding: EdgeInsets.zero,
+                            bubblesColor: const BubblesColor(
+                              dotPrimaryColor: AppColors.blueColor,
+                              dotSecondaryColor: AppColors.blueColor,
                             ),
-                            onPressed: () {
+                            isLiked: inCart,
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                inCart
+                                    ? Icons.remove_shopping_cart
+                                    : Icons.add_shopping_cart,
+                                color: inCart
+                                    ? Colors.white
+                                    : AppColors.blackColor,
+                                size: 20,
+                              );
+                            },
+                            onTap: (bool isLiked) async {
                               if (inCart) {
                                 cart.removeItem(product.id!);
                                 CustomSnackBar.showSnackBar(
@@ -190,6 +212,7 @@ class WishlistScreen extends StatelessWidget {
                                   color: Colors.green,
                                 );
                               }
+                              return !isLiked;
                             },
                           ),
                         );

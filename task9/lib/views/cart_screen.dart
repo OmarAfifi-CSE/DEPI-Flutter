@@ -47,23 +47,30 @@ class CartScreen extends StatelessWidget {
     CartItem cartItem,
     CartController cart,
   ) {
+    const String prefix = 'cart_page';
     return GestureDetector(
       onTap: () {
-        context.pushNamed(AppRoutes.itemDetailScreen, extra: cartItem.product);
+        context.pushNamed(
+          AppRoutes.itemDetailScreen,
+          extra: {'product': cartItem.product, 'prefix': prefix},
+        );
       },
       child: Container(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: Row(
           children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(cartItem.product.imageUrl),
-                  fit: BoxFit.cover,
+            Hero(
+              tag: '${prefix}_${cartItem.product.id!}',
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(cartItem.product.imageUrl),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
               ),
             ),
             const SizedBox(width: 16),
