@@ -26,6 +26,7 @@ class DailyForecast {
   final String condition;
   final double maxTemp;
   final double minTemp;
+  final List<HourlyForecast> hourlyForecasts;
 
   DailyForecast({
     required this.day,
@@ -33,15 +34,23 @@ class DailyForecast {
     required this.condition,
     required this.maxTemp,
     required this.minTemp,
+    required this.hourlyForecasts,
   });
 
   factory DailyForecast.fromJson(Map<String, dynamic> json) {
+    // Hourly forecasts for the day
+    final hourlyData = json['hour'] as List;
+    final List<HourlyForecast> hourly = hourlyData
+        .map((hourJson) => HourlyForecast.fromJson(hourJson))
+        .toList();
+
     return DailyForecast(
       day: json['date'],
       iconUrl: json['day']['condition']['icon'],
       condition: json['day']['condition']['text'],
       maxTemp: (json['day']['maxtemp_c'] as num).toDouble(),
       minTemp: (json['day']['mintemp_c'] as num).toDouble(),
+      hourlyForecasts: hourly,
     );
   }
 }
@@ -89,12 +98,6 @@ class Weather {
         .map((dayJson) => DailyForecast.fromJson(dayJson))
         .toList();
 
-    // Hourly forecasts
-    final todayHourlyJson = forecastDaysJson[0]['hour'] as List;
-    final List<HourlyForecast> hourly = todayHourlyJson
-        .map((hourJson) => HourlyForecast.fromJson(hourJson))
-        .toList();
-
     return Weather(
       lastUpdated: json['current']['last_updated'],
       cityName: json['location']['name'],
@@ -103,12 +106,15 @@ class Weather {
       feelsLike: (json['current']['feelslike_c'] as num).toDouble(),
       condition: json['current']['condition']['text'],
       conditionCode: (json['current']['condition']['code'] as num).toInt(),
-      iconCode: json['current']['condition']['icon'].toString(),
+      iconCode: (json['current']['condition']['icon'] as String).replaceAll(
+        '64x64',
+        '128x128',
+      ),
       windSpeed: (json['current']['wind_kph'] as num).toDouble(),
       humidity: (json['current']['humidity'] as num).toDouble(),
       pressure: (json['current']['pressure_mb'] as num).toDouble(),
       dailyForecasts: daily,
-      hourlyForecasts: hourly,
+      hourlyForecasts: daily.isNotEmpty ? daily[0].hourlyForecasts : [],
     );
   }
 }

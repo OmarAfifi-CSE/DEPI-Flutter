@@ -310,7 +310,7 @@ class HomeScreen extends StatelessWidget {
         GlassContainer(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
           backgroundColor: theme.containerColor.withValues(alpha: 0.8),
-          child: _buildHourlyForecast(weather.hourlyForecasts, theme),
+          child: _buildHourlyForecast(weather, theme),
         ),
         const SizedBox(height: 8),
         GlassContainer(
@@ -322,18 +322,26 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHourlyForecast(
-    List<HourlyForecast> forecasts,
-    WeatherTheme theme,
-  ) {
+  Widget _buildHourlyForecast(Weather weather, WeatherTheme theme) {
     final int currentHour = DateTime.now().hour;
-    final List<HourlyForecast> upcomingForecasts = forecasts.where((forecast) {
+    // Get today's remaining hourly forecasts
+    final List<HourlyForecast> upcomingToday = weather.hourlyForecasts.where((
+      forecast,
+    ) {
       final int forecastHour = int.parse(forecast.time.substring(0, 2));
       return forecastHour >= currentHour;
     }).toList();
-    final displayList = upcomingForecasts.isNotEmpty
-        ? upcomingForecasts
-        : forecasts;
+    // Get all of tomorrow's hourly forecasts
+    List<HourlyForecast> tomorrowForecasts = [];
+    if (weather.dailyForecasts.length > 1) {
+      tomorrowForecasts = weather.dailyForecasts[1].hourlyForecasts;
+    }
+
+    // Combine today's remaining hours with tomorrow's and take the first 24
+    final List<HourlyForecast> displayList = [
+      ...upcomingToday,
+      ...tomorrowForecasts,
+    ].take(24).toList();
 
     return SizedBox(
       height: 120.h,
@@ -343,10 +351,10 @@ class HomeScreen extends StatelessWidget {
         separatorBuilder: (context, index) => SizedBox(width: 12.w),
         itemBuilder: (context, index) {
           final forecast = displayList[index];
+          final bool isFirstItem = index == 0;
+
           return HourlyForecastCard(
-            time: index == 0 && upcomingForecasts.isNotEmpty
-                ? "Now"
-                : forecast.time,
+            time: isFirstItem ? "Now" : forecast.time,
             iconUrl: forecast.iconUrl,
             temperature: '${forecast.temp.round()}°',
             backgroundColor: theme.containerColor.withValues(alpha: 0.8),
