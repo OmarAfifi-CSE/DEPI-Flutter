@@ -96,4 +96,15 @@ class WeatherController extends ChangeNotifier {
 
     return await Geolocator.getCurrentPosition();
   }
+
+  Future<void> refreshWeather() async {
+    try {
+      final weatherData = await weatherService.getWeatherByCity(city);
+      weather = Weather.fromJson(weatherData);
+      notifyListeners();
+    } catch (e) {
+      print('Omar :: Failed to refresh weather: $e');
+      notifyListeners();
+    }
+  }
 }

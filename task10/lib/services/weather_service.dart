@@ -14,7 +14,6 @@ class WeatherService {
         queryParameters: {'key': apiKey, 'q': city, 'days': 7, 'aqi': 'no'},
       );
       if (response.statusCode == 200) {
-        print(response.data);
         return response.data;
       } else {
         print(

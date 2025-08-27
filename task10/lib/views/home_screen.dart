@@ -38,23 +38,28 @@ class HomeScreen extends StatelessWidget {
                   )
                 : weather == null
                 ? _buildEmptyState(context, weatherController, theme)
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 16.h,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildSearchBar(context, weatherController, theme),
-                          SizedBox(height: 24.h),
-                          _buildMainWeatherInfo(context, weather, theme),
-                          SizedBox(height: 32.h),
-                          _buildWeatherDetails(weather, theme),
-                          const SizedBox(height: 20),
-                          _buildForecastSection(context, weather, theme),
-                        ],
+                : RefreshIndicator(
+                    color: theme.primaryTextColor,
+                    backgroundColor: theme.containerColor,
+                    onRefresh: () => weatherController.refreshWeather(),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 16.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildSearchBar(context, weatherController, theme),
+                            SizedBox(height: 24.h),
+                            _buildMainWeatherInfo(context, weather, theme),
+                            SizedBox(height: 32.h),
+                            _buildWeatherDetails(weather, theme),
+                            const SizedBox(height: 20),
+                            _buildForecastSection(context, weather, theme),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -200,9 +205,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildWeatherDetails(Weather weather, WeatherTheme theme) {
-    final lastUpdatedTime = DateFormat(
-      'HH:mm',
-    ).format(DateTime.parse(weather.lastUpdated));
     return GlassContainer(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
       backgroundColor: theme.containerColor.withValues(alpha: 0.8),
