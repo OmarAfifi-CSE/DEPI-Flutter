@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:task10/views/search_screen.dart';
 
 import '../controllers/weather_controller.dart';
 
@@ -99,38 +100,70 @@ class HomeScreen extends StatelessWidget {
     WeatherController weatherController,
     WeatherTheme theme,
   ) {
-    return TextField(
-      textInputAction: TextInputAction.search,
-      onSubmitted: (value) => weatherController.updateCity(value),
-      style: TextStyle(color: theme.primaryTextColor),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.h),
-        hintText: 'Search for a city...',
-        hintStyle: TextStyle(color: theme.primaryTextColor),
-        filled: true,
-        fillColor: theme.containerColor.withValues(alpha: 0.8),
-        prefixIcon: Icon(
-          Icons.search,
-          color: theme.primaryTextColor.withValues(alpha: 0.8),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.5)),
+    return GestureDetector(
+      onTap: () async {
+        final selectedCity = await Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                SearchScreen(
+                  weatherController: weatherController,
+                  theme: theme,
+                ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+            transitionDuration: const Duration(milliseconds: 400),
+          ),
+        );
+        if (selectedCity != null && selectedCity is String) {
+          weatherController.updateCity(selectedCity);
+        }
+      },
+      child: AbsorbPointer(
+        child: TextField(
+          textInputAction: TextInputAction.search,
+          onSubmitted: (value) => weatherController.updateCity(value),
+          style: TextStyle(color: theme.primaryTextColor),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 10.h),
+            hintText: 'Search for a city...',
+            hintStyle: TextStyle(color: theme.primaryTextColor),
+            filled: true,
+            fillColor: theme.containerColor.withValues(alpha: 0.8),
+            prefixIcon: Icon(
+              Icons.search,
+              color: theme.primaryTextColor.withValues(alpha: 0.8),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50.r),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50.r),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50.r),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50.r),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+          cursorColor: theme.primaryTextColor,
         ),
       ),
-      cursorColor: theme.primaryTextColor,
     );
   }
 
