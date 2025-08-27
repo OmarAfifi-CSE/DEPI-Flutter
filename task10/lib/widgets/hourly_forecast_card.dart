@@ -5,12 +5,16 @@ class HourlyForecastCard extends StatelessWidget {
   final String time;
   final String iconUrl;
   final String temperature;
+  final Color backgroundColor;
+  final Color textColor;
 
   const HourlyForecastCard({
     super.key,
     required this.time,
     required this.iconUrl,
     required this.temperature,
+    required this.backgroundColor,
+    required this.textColor,
   });
 
   @override
@@ -19,7 +23,7 @@ class HourlyForecastCard extends StatelessWidget {
       width: 80.w,
       padding: EdgeInsets.symmetric(vertical: 10.h),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Stack(
@@ -27,7 +31,7 @@ class HourlyForecastCard extends StatelessWidget {
         children: [
           Text(
             time,
-            style: TextStyle(color: Colors.white, fontSize: 16.sp),
+            style: TextStyle(color: textColor, fontSize: 16.sp),
           ),
           Positioned(
             bottom: 0,
@@ -37,14 +41,14 @@ class HourlyForecastCard extends StatelessWidget {
               height: 50.h,
               width: 50.w,
               errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.cloud_off, color: Colors.white, size: 40),
+                  Icon(Icons.cloud_off, color: textColor, size: 40),
             ),
           ),
           Positioned(
             bottom: 0,
             child: Text(
               temperature,
-              style: TextStyle(color: Colors.white, fontSize: 16.sp),
+              style: TextStyle(color: textColor, fontSize: 16.sp),
             ),
           ),
         ],

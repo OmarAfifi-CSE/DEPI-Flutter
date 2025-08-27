@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       child: ChangeNotifierProvider(
-        create: (_) => WeatherController(),
+        create: (_) => WeatherController()..initWeather(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Weather App',

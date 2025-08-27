@@ -7,6 +7,7 @@ class DailyForecastTile extends StatelessWidget {
   final String condition;
   final String tempHigh;
   final String tempLow;
+  final Color textColor;
 
   const DailyForecastTile({
     super.key,
@@ -15,6 +16,7 @@ class DailyForecastTile extends StatelessWidget {
     required this.condition,
     required this.tempHigh,
     required this.tempLow,
+    required this.textColor,
   });
 
   @override
@@ -27,7 +29,7 @@ class DailyForecastTile extends StatelessWidget {
             flex: 2,
             child: Text(
               day,
-              style: TextStyle(color: Colors.white, fontSize: 16.sp),
+              style: TextStyle(color: textColor, fontSize: 16.sp),
             ),
           ),
           Expanded(
@@ -38,11 +40,8 @@ class DailyForecastTile extends StatelessWidget {
                   'https:$iconUrl',
                   height: 40.w,
                   width: 40.w,
-                  errorBuilder: (context, error, stackTrace) => const Icon(
-                    Icons.cloud_off,
-                    color: Colors.white,
-                    size: 32,
-                  ),
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(Icons.cloud_off, color: textColor, size: 32),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -50,7 +49,7 @@ class DailyForecastTile extends StatelessWidget {
                     message: condition,
                     child: Text(
                       condition,
-                      style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                      style: TextStyle(color: textColor, fontSize: 16.sp),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -66,12 +65,12 @@ class DailyForecastTile extends StatelessWidget {
               children: [
                 Text(
                   tempHigh,
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                  style: TextStyle(color: textColor, fontSize: 16.sp),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   tempLow,
-                  style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                  style: TextStyle(color: textColor, fontSize: 12.sp),
                 ),
               ],
             ),

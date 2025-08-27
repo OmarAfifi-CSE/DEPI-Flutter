@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:task10/styling/app_assets.dart';
 
 import '../controllers/weather_controller.dart';
 
 import '../models/weather_model.dart';
+import '../styling/weather_theme.dart';
 import '../widgets/daily_forecast_tile.dart';
 import '../widgets/glass_container.dart';
 import '../widgets/hourly_forecast_card.dart';
@@ -18,36 +21,52 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final weatherController = context.watch<WeatherController>();
     final weather = weatherController.weather;
+    final WeatherTheme theme = WeatherTheme.getThemeForWeather(
+      weather?.conditionCode,
+    );
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2C3E50),
-      body: SafeArea(
-        child: weatherController.isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              )
-            : weather == null
-            ? _buildEmptyState(context, weatherController)
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 16.h,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _buildSearchBar(context, weatherController),
-                      SizedBox(height: 24.h),
-                      _buildMainWeatherInfo(context, weather),
-                      SizedBox(height: 32.h),
-                      _buildWeatherDetails(weather),
-                      const SizedBox(height: 20),
-                      _buildForecastSection(context, weather),
-                    ],
-                  ),
-                ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(theme.backgroundImage),
+                fit: BoxFit.cover,
               ),
+            ),
+          ),
+          SafeArea(
+            child: weatherController.isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: theme.primaryTextColor,
+                    ),
+                  )
+                : weather == null
+                ? _buildEmptyState(context, weatherController, theme)
+                : SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 16.h,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _buildSearchBar(context, weatherController, theme),
+                          SizedBox(height: 24.h),
+                          _buildMainWeatherInfo(context, weather, theme),
+                          SizedBox(height: 32.h),
+                          _buildWeatherDetails(weather, theme),
+                          const SizedBox(height: 20),
+                          _buildForecastSection(context, weather, theme),
+                        ],
+                      ),
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }
@@ -55,6 +74,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildEmptyState(
     BuildContext context,
     WeatherController weatherController,
+    WeatherTheme theme,
   ) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -62,12 +82,12 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildSearchBar(context, weatherController),
+          _buildSearchBar(context, weatherController, theme),
           const SizedBox(height: 20),
-          const Center(
+          Center(
             child: Text(
               'Search for a city to get started!',
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: theme.primaryTextColor, fontSize: 18),
               textAlign: TextAlign.center,
             ),
           ),
@@ -79,81 +99,124 @@ class HomeScreen extends StatelessWidget {
   Widget _buildSearchBar(
     BuildContext context,
     WeatherController weatherController,
+    WeatherTheme theme,
   ) {
     return TextField(
       textInputAction: TextInputAction.search,
       onSubmitted: (value) => weatherController.updateCity(value),
-      style: const TextStyle(color: Colors.white),
+      style: TextStyle(color: theme.primaryTextColor),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 10.h),
         hintText: 'Search for a city...',
-        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
+        hintStyle: TextStyle(color: theme.primaryTextColor),
         filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.1),
+        fillColor: theme.containerColor.withValues(alpha: 0.8),
         prefixIcon: Icon(
           Icons.search,
-          color: Colors.white.withValues(alpha: 0.6),
+          color: theme.primaryTextColor.withValues(alpha: 0.8),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.r),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.r),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50.r),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.5)),
+        ),
+      ),
+      cursorColor: theme.primaryTextColor,
+    );
+  }
+
+  Widget _buildMainWeatherInfo(
+    BuildContext context,
+    Weather weather,
+    WeatherTheme theme,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      decoration: BoxDecoration(
+        color: theme.containerColor.withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.3),
+          width: 1.0,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  '${weather.cityName}, ${weather.country}',
+                  style: TextStyle(
+                    color: theme.primaryTextColor,
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              weather.conditionCode == 1000
+                  ? Icon(
+                      Icons.wb_sunny,
+                      color: theme.primaryTextColor,
+                      size: 80.sp,
+                    )
+                  : FaIcon(
+                      theme.weatherIcon,
+                      color: theme.primaryTextColor,
+                      size: 80.sp,
+                    ),
+              SizedBox(width: 16.w),
+              Text(
+                "${weather.temperature.round()}°",
+                style: TextStyle(
+                  color: theme.primaryTextColor,
+                  fontSize: 90.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Text(
+            weather.condition,
+            style: TextStyle(
+              color: theme.primaryTextColor,
+              fontSize: 22.sp,
+              fontWeight: FontWeight.w400,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildMainWeatherInfo(BuildContext context, Weather weather) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.location_on, color: Colors.white70, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              '${weather.cityName}, ${weather.country}',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-        Image.network(
-          'https:${weather.iconCode}',
-          height: 80,
-          width: 80,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) =>
-              const Icon(Icons.cloud_off, color: Colors.white, size: 60),
-        ),
-        Text(
-          "${weather.temperature.round()}°C",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          weather.condition,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 22.sp,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildWeatherDetails(Weather weather) {
+  Widget _buildWeatherDetails(Weather weather, WeatherTheme theme) {
     final lastUpdatedTime = DateFormat(
       'HH:mm',
     ).format(DateTime.parse(weather.lastUpdated));
     return GlassContainer(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      backgroundColor: theme.containerColor.withValues(alpha: 0.8),
       child: Column(
         children: [
           Row(
@@ -161,18 +224,27 @@ class HomeScreen extends StatelessWidget {
             children: [
               WeatherDetailCard(
                 icon: Icons.thermostat,
+                iconColor: theme.primaryTextColor,
                 label: 'Feels like',
+                labelColor: theme.primaryTextColor,
                 value: '${weather.feelsLike.round()}°',
+                valueColor: theme.primaryTextColor,
               ),
               WeatherDetailCard(
                 icon: Icons.water_drop,
+                iconColor: theme.primaryTextColor,
                 label: 'Humidity',
+                labelColor: theme.primaryTextColor,
                 value: '${weather.humidity.round()}%',
+                valueColor: theme.primaryTextColor,
               ),
               WeatherDetailCard(
                 icon: Icons.wind_power,
+                iconColor: theme.primaryTextColor,
                 label: 'Wind',
+                labelColor: theme.primaryTextColor,
                 value: '${weather.windSpeed.round()} km/h',
+                valueColor: theme.primaryTextColor,
               ),
             ],
           ),
@@ -182,13 +254,19 @@ class HomeScreen extends StatelessWidget {
             children: [
               WeatherDetailCard(
                 icon: Icons.compress,
+                iconColor: theme.primaryTextColor,
                 label: 'Pressure',
+                labelColor: theme.primaryTextColor,
                 value: '${weather.pressure.round()} mb',
+                valueColor: theme.primaryTextColor,
               ),
               WeatherDetailCard(
                 icon: Icons.update,
+                iconColor: theme.primaryTextColor,
                 label: 'Last updated',
+                labelColor: theme.primaryTextColor,
                 value: lastUpdatedTime,
+                valueColor: theme.primaryTextColor,
               ),
             ],
           ),
@@ -197,79 +275,87 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildForecastSection(BuildContext context, Weather weather) {
-    return GlassContainer(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'HOURLY FORECAST',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const Divider(height: 24, color: Colors.white30),
-          _buildHourlyForecast(weather.hourlyForecasts),
-          const Divider(height: 32, color: Colors.white30),
-          Text(
-            'DAILY FORECAST',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          _buildDailyForecast(weather.dailyForecasts),
-        ],
-      ),
+  Widget _buildForecastSection(
+    BuildContext context,
+    Weather weather,
+    WeatherTheme theme,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GlassContainer(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+          child: _buildHourlyForecast(weather.hourlyForecasts, theme),
+        ),
+        const SizedBox(height: 8),
+        GlassContainer(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+          child: _buildDailyForecast(weather.dailyForecasts, theme),
+        ),
+      ],
     );
   }
 
-  Widget _buildHourlyForecast(List<HourlyForecast> forecasts) {
+  Widget _buildHourlyForecast(
+    List<HourlyForecast> forecasts,
+    WeatherTheme theme,
+  ) {
+    final int currentHour = DateTime.now().hour;
+    final List<HourlyForecast> upcomingForecasts = forecasts.where((forecast) {
+      final int forecastHour = int.parse(forecast.time.substring(0, 2));
+      return forecastHour >= currentHour;
+    }).toList();
+    final displayList = upcomingForecasts.isNotEmpty
+        ? upcomingForecasts
+        : forecasts;
+
     return SizedBox(
       height: 120.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: forecasts.length,
+        itemCount: displayList.length,
         separatorBuilder: (context, index) => SizedBox(width: 12.w),
         itemBuilder: (context, index) {
-          final forecast = forecasts[index];
+          final forecast = displayList[index];
           return HourlyForecastCard(
-            time: forecast.time,
+            time: index == 0 && upcomingForecasts.isNotEmpty
+                ? "Now"
+                : forecast.time,
             iconUrl: forecast.iconUrl,
             temperature: '${forecast.temp.round()}°',
+            backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+            textColor: theme.primaryTextColor,
           );
         },
       ),
     );
   }
 
-  Widget _buildDailyForecast(List<DailyForecast> forecasts) {
+  Widget _buildDailyForecast(
+    List<DailyForecast> forecasts,
+    WeatherTheme theme,
+  ) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: forecasts.length,
       itemBuilder: (context, index) {
         final forecast = forecasts[index];
-        // Format the date string to a readable day name
         final date = DateTime.parse(forecast.day);
         final dayName = index == 0
             ? 'Today'
             : index == 1
             ? 'Tomorrow'
-            : DateFormat('EEE').format(date); // e.g., 'Thu'
-
+            : DateFormat('EEE').format(date);
         return DailyForecastTile(
           day: dayName,
           iconUrl: forecast.iconUrl,
-          // Pass URL
           condition: forecast.condition,
           tempHigh: '${forecast.maxTemp.round()}°',
           tempLow: '${forecast.minTemp.round()}°',
+          textColor: theme.primaryTextColor,
         );
       },
     );
