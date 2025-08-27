@@ -1,16 +1,43 @@
-# task10
+## 📸 Showcase
+<table width="100%">
+<tr>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task10/assets/screenshots/1-%20Sunny%20Weather.png" alt="Sunny Weather" width="300">
+      </p>
+    </td>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task10/assets/screenshots/2-%20Weak%20Weather.png" alt="All Weak Weather" width="300">
+      </p>
+    </td>
+  </tr>
 
-A new Flutter project.
+<tr>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task10/assets/screenshots/3-%20Cloudy%20Weather.png" alt="Cloudy Weather" width="300">
+      </p>
+    </td>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task10/assets/screenshots/4-%20Rainy%20Weather.png" alt="Rainy Weather" width="300">
+      </p>
+    </td>
+  </tr>
 
-## Getting Started
+<tr>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task10/assets/screenshots/5-%20Snowy%20Weather.png" alt="Snowy Weather" width="300">
+      </p>
+    </td>
+    <td width="50%" valign="top">
+      <p align="center">
+        <img src="https://github.com/OmarAfifi-CSE/DEPI-Flutter/blob/main/task10/assets/screenshots/6-%20Search%20Screen.png" alt="Search Screen" width="300">
+      </p>
+    </td>
+  </tr>
+</table>
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
