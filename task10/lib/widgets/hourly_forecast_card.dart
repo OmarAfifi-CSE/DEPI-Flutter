@@ -41,7 +41,7 @@ class HourlyForecastCard extends StatelessWidget {
               height: 50.h,
               width: 50.w,
               errorBuilder: (context, error, stackTrace) =>
-                  Icon(Icons.cloud_off, color: textColor, size: 40),
+                  Icon(Icons.cloud_off, color: textColor, size: 40.sp),
             ),
           ),
           Positioned(

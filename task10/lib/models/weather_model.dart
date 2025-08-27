@@ -1,3 +1,5 @@
+import 'package:timeago/timeago.dart' as timeago;
+
 class HourlyForecast {
   final String time;
   final String iconUrl;
@@ -74,6 +76,11 @@ class Weather {
     required this.hourlyForecasts,
     required this.dailyForecasts,
   });
+
+  String get lastUpdatedFormatted {
+    final lastUpdatedDateTime = DateTime.parse(lastUpdated);
+    return timeago.format(lastUpdatedDateTime);
+  }
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     // Daily forecasts

@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:task10/styling/app_assets.dart';
 
 import '../controllers/weather_controller.dart';
 
 import '../models/weather_model.dart';
 import '../styling/weather_theme.dart';
+import '../widgets/animated_weather_background.dart';
 import '../widgets/daily_forecast_tile.dart';
 import '../widgets/glass_container.dart';
 import '../widgets/hourly_forecast_card.dart';
@@ -28,14 +28,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(theme.backgroundImage),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          AnimatedWeatherBackground(theme: theme),
           SafeArea(
             child: weatherController.isLoading
                 ? Center(
@@ -173,17 +166,13 @@ class HomeScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              weather.conditionCode == 1000
-                  ? Icon(
-                      Icons.wb_sunny,
-                      color: theme.primaryTextColor,
-                      size: 80.sp,
-                    )
-                  : FaIcon(
-                      theme.weatherIcon,
-                      color: theme.primaryTextColor,
-                      size: 80.sp,
-                    ),
+              Icon(
+                weather.conditionCode == 1000
+                    ? Icons.wb_sunny
+                    : theme.weatherIcon,
+                color: theme.primaryTextColor,
+                size: 80.sp,
+              ),
               SizedBox(width: 16.w),
               Text(
                 "${weather.temperature.round()}°",
@@ -239,7 +228,7 @@ class HomeScreen extends StatelessWidget {
                 valueColor: theme.primaryTextColor,
               ),
               WeatherDetailCard(
-                icon: Icons.wind_power,
+                icon: FontAwesomeIcons.wind,
                 iconColor: theme.primaryTextColor,
                 label: 'Wind',
                 labelColor: theme.primaryTextColor,
@@ -248,7 +237,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(height: 32, color: Colors.white30),
+          Divider(height: 32, color: Colors.transparent),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -265,7 +254,7 @@ class HomeScreen extends StatelessWidget {
                 iconColor: theme.primaryTextColor,
                 label: 'Last updated',
                 labelColor: theme.primaryTextColor,
-                value: lastUpdatedTime,
+                value: weather.lastUpdatedFormatted,
                 valueColor: theme.primaryTextColor,
               ),
             ],

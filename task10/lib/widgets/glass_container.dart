@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GlassContainer extends StatelessWidget {
   final Widget child;
@@ -26,15 +27,15 @@ class GlassContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: width?.w,
+      height: height?.h,
       padding: padding,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           color: borderColor.withValues(alpha: 0.3),
-          width: borderWidth,
+          width: borderWidth.w,
         ),
       ),
       child: child,
