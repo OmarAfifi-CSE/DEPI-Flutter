@@ -23,7 +23,7 @@ class WeatherTheme {
   static final WeatherTheme sunnyTheme = WeatherTheme(
     backgroundImage: AppAssets.sunnyBackground,
     weatherIcon: FontAwesomeIcons.sun,
-    primaryTextColor: const Color(0xffEFAA82),
+    primaryTextColor: const Color(0xffbe8667),
     secondaryTextColor: Colors.black54,
     containerColor: const Color(0xffFAE2BD),
   );
@@ -31,7 +31,7 @@ class WeatherTheme {
   static final WeatherTheme cloudyTheme = WeatherTheme(
     backgroundImage: AppAssets.cloudyBackground,
     weatherIcon: FontAwesomeIcons.cloud,
-    primaryTextColor: Color(0xffAED5E4),
+    primaryTextColor: Color(0xffc2ecff),
     secondaryTextColor: Colors.white,
     containerColor: Color(0xff5A8BAB),
   );
@@ -39,7 +39,7 @@ class WeatherTheme {
   static final WeatherTheme rainyTheme = WeatherTheme(
     backgroundImage: AppAssets.rainyBackground,
     weatherIcon: FontAwesomeIcons.cloudRain,
-    primaryTextColor: Color(0xffC9E8E0),
+    primaryTextColor: Color(0xffd8fff7),
     secondaryTextColor: Colors.white70,
     containerColor: Color(0xff7FC3AE),
   );
@@ -47,7 +47,7 @@ class WeatherTheme {
   static final WeatherTheme snowyTheme = WeatherTheme(
     backgroundImage: AppAssets.snowyBackground,
     weatherIcon: FontAwesomeIcons.snowflake,
-    primaryTextColor: Color(0xffE2E2E3),
+    primaryTextColor: Color(0xfffefeff),
     secondaryTextColor: Colors.white70,
     containerColor: Color(0xffA7ACC4),
   );

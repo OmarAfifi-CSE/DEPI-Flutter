@@ -67,6 +67,7 @@ class Weather {
   final double windSpeed;
   final double humidity;
   final double pressure;
+  final double visibility;
   final List<HourlyForecast> hourlyForecasts;
   final List<DailyForecast> dailyForecasts;
 
@@ -82,13 +83,14 @@ class Weather {
     required this.windSpeed,
     required this.humidity,
     required this.pressure,
+    required this.visibility,
     required this.hourlyForecasts,
     required this.dailyForecasts,
   });
 
   String get lastUpdatedFormatted {
     final lastUpdatedDateTime = DateTime.parse(lastUpdated);
-    return timeago.format(lastUpdatedDateTime);
+    return timeago.format(lastUpdatedDateTime, locale: 'en_short');
   }
 
   factory Weather.fromJson(Map<String, dynamic> json) {
@@ -113,6 +115,7 @@ class Weather {
       windSpeed: (json['current']['wind_kph'] as num).toDouble(),
       humidity: (json['current']['humidity'] as num).toDouble(),
       pressure: (json['current']['pressure_mb'] as num).toDouble(),
+      visibility: (json['current']['vis_km'] as num).toDouble(),
       dailyForecasts: daily,
       hourlyForecasts: daily.isNotEmpty ? daily[0].hourlyForecasts : [],
     );

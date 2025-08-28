@@ -122,46 +122,52 @@ class HomeScreen extends StatelessWidget {
         }
       },
       child: AbsorbPointer(
-        child: TextField(
-          textInputAction: TextInputAction.search,
-          onSubmitted: (value) => weatherController.updateCity(value),
-          style: TextStyle(color: theme.primaryTextColor),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 10.h),
-            hintText: 'Search for a city...',
-            hintStyle: TextStyle(color: theme.primaryTextColor),
-            filled: true,
-            fillColor: theme.containerColor.withValues(alpha: 0.8),
-            prefixIcon: Icon(
-              Icons.search,
-              color: theme.primaryTextColor.withValues(alpha: 0.8),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.r),
-              borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.3),
+        child: Hero(
+          tag: 'search-bar',
+          child: Material(
+            type: MaterialType.transparency,
+            child: TextField(
+              textInputAction: TextInputAction.search,
+              onSubmitted: (value) => weatherController.updateCity(value),
+              style: TextStyle(color: theme.primaryTextColor),
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 10.h),
+                hintText: 'Search for a city...',
+                hintStyle: TextStyle(color: theme.primaryTextColor),
+                filled: true,
+                fillColor: theme.containerColor.withValues(alpha: 0.8),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: theme.primaryTextColor.withValues(alpha: 0.8),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.r),
+                  borderSide: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.r),
+                  borderSide: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.r),
+                  borderSide: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.r),
+                  borderSide: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
               ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.r),
-              borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.3),
-              ),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.r),
-              borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.3),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.r),
-              borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.5),
-              ),
+              cursorColor: theme.primaryTextColor,
             ),
           ),
-          cursorColor: theme.primaryTextColor,
         ),
       ),
     );
@@ -172,16 +178,9 @@ class HomeScreen extends StatelessWidget {
     Weather weather,
     WeatherTheme theme,
   ) {
-    return Container(
+    return GlassContainer(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-      decoration: BoxDecoration(
-        color: theme.containerColor.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.3),
-          width: 1.0,
-        ),
-      ),
+      backgroundColor: theme.containerColor,
       child: Column(
         children: [
           Row(
@@ -240,7 +239,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildWeatherDetails(Weather weather, WeatherTheme theme) {
     return GlassContainer(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-      backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+      backgroundColor: theme.containerColor,
       child: Column(
         children: [
           Row(
@@ -277,11 +276,19 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               WeatherDetailCard(
-                icon: Icons.compress,
+                icon: FontAwesomeIcons.gaugeHigh,
                 iconColor: theme.primaryTextColor,
                 label: 'Pressure',
                 labelColor: theme.primaryTextColor,
                 value: '${weather.pressure.round()} mb',
+                valueColor: theme.primaryTextColor,
+              ),
+              WeatherDetailCard(
+                icon: FontAwesomeIcons.solidEye,
+                iconColor: theme.primaryTextColor,
+                label: 'Visibility',
+                labelColor: theme.primaryTextColor,
+                value: '${weather.visibility.round()} km',
                 valueColor: theme.primaryTextColor,
               ),
               WeatherDetailCard(
@@ -309,13 +316,13 @@ class HomeScreen extends StatelessWidget {
       children: [
         GlassContainer(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-          backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+          backgroundColor: theme.containerColor,
           child: _buildHourlyForecast(weather, theme),
         ),
         const SizedBox(height: 8),
         GlassContainer(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-          backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+          backgroundColor: theme.containerColor,
           child: _buildDailyForecast(weather.dailyForecasts, theme),
         ),
       ],
@@ -352,12 +359,11 @@ class HomeScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final forecast = displayList[index];
           final bool isFirstItem = index == 0;
-
           return HourlyForecastCard(
             time: isFirstItem ? "Now" : forecast.time,
             iconUrl: forecast.iconUrl,
             temperature: '${forecast.temp.round()}°',
-            backgroundColor: theme.containerColor.withValues(alpha: 0.8),
+            backgroundColor: theme.containerColor,
             textColor: theme.primaryTextColor,
           );
         },

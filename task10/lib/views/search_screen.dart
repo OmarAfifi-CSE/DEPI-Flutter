@@ -75,9 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       horizontal: 16.w,
                       vertical: 16.h,
                     ),
-                    backgroundColor: theme.containerColor.withValues(
-                      alpha: 0.8,
-                    ),
+                    backgroundColor: theme.containerColor,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -115,9 +113,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       horizontal: 16.w,
                       vertical: 16.h,
                     ),
-                    backgroundColor: theme.containerColor.withValues(
-                      alpha: 0.8,
-                    ),
+                    backgroundColor: theme.containerColor,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -147,9 +143,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       horizontal: 16.w,
                       vertical: 16.h,
                     ),
-                    backgroundColor: theme.containerColor.withValues(
-                      alpha: 0.8,
-                    ),
+                    backgroundColor: theme.containerColor,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -186,38 +180,58 @@ class _SearchScreenState extends State<SearchScreen> {
     WeatherController weatherController,
     WeatherTheme theme,
   ) {
-    return TextField(
-      textInputAction: TextInputAction.search,
-      onSubmitted: (value) => _onCitySelected(value),
-      style: TextStyle(color: theme.primaryTextColor),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.h),
-        hintText: 'Search for a city...',
-        hintStyle: TextStyle(color: theme.primaryTextColor),
-        filled: true,
-        fillColor: theme.containerColor.withValues(alpha: 0.8),
-        prefixIcon: Icon(
-          Icons.search,
-          color: theme.primaryTextColor.withValues(alpha: 0.8),
+    final baseBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(50.r),
+      borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+    );
+    return Row(
+      children: [
+        Expanded(
+          child: Hero(
+            tag: 'search-bar',
+            child: Material(
+              type: MaterialType.transparency,
+              child: TextField(
+                textInputAction: TextInputAction.search,
+                onSubmitted: (value) => _onCitySelected(value),
+                style: TextStyle(color: theme.primaryTextColor),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 10.h),
+                  hintText: 'Search for a city...',
+                  hintStyle: TextStyle(color: theme.primaryTextColor),
+                  filled: true,
+                  fillColor: theme.containerColor.withValues(alpha: 0.8),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: theme.primaryTextColor.withValues(alpha: 0.8),
+                  ),
+                  border: baseBorder,
+                  enabledBorder: baseBorder,
+                  disabledBorder: baseBorder,
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.r),
+                    borderSide: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ),
+                cursorColor: theme.primaryTextColor,
+              ),
+            ),
+          ),
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+        SizedBox(width: 12.w),
+        IconButton(
+          padding: EdgeInsets.zero,
+          icon: GlassContainer(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            borderRadius: 50.r,
+            backgroundColor: theme.containerColor,
+            child: Icon(Icons.close, color: theme.primaryTextColor),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.5)),
-        ),
-      ),
-      cursorColor: theme.primaryTextColor,
+      ],
     );
   }
 
