@@ -41,9 +41,9 @@ class DailyForecastTile extends StatelessWidget {
                   height: 40.w,
                   width: 40.w,
                   errorBuilder: (context, error, stackTrace) =>
-                      Icon(Icons.cloud_off, color: textColor, size: 32),
+                      Icon(Icons.cloud_off, color: textColor, size: 32.sp),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Tooltip(
                     message: condition,
@@ -67,7 +67,7 @@ class DailyForecastTile extends StatelessWidget {
                   tempHigh,
                   style: TextStyle(color: textColor, fontSize: 16.sp),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Text(
                   tempLow,
                   style: TextStyle(color: textColor, fontSize: 12.sp),

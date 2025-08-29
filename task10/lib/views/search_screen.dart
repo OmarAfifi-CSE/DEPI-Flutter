@@ -87,13 +87,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         // Current city chip
                         ActionChip(
                           avatar: Icon(
                             Icons.location_on,
                             color: theme.primaryTextColor,
-                            size: 18,
+                            size: 18.sp,
                           ),
                           label: Text('${weatherController.weather?.cityName}'),
                           labelStyle: TextStyle(color: theme.primaryTextColor),
@@ -107,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   GlassContainer(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
@@ -125,19 +125,19 @@ class _SearchScreenState extends State<SearchScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         Wrap(
-                          spacing: 8.0,
-                          runSpacing: 8.0,
+                          spacing: 8.0.w,
+                          runSpacing: 8.0.h,
                           children: topCitiesEgypt
                               .map((city) => _buildCityChip(city, theme))
                               .toList(),
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24.h),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   GlassContainer(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
@@ -155,10 +155,10 @@ class _SearchScreenState extends State<SearchScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         Wrap(
-                          spacing: 8.0,
-                          runSpacing: 8.0,
+                          spacing: 8.0.w,
+                          runSpacing: 8.0.h,
                           children: topCitiesWorld
                               .map((city) => _buildCityChip(city, theme))
                               .toList(),

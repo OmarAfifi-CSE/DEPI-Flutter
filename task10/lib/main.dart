@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         create: (_) => WeatherController()..initWeather(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Weather App',
+          title: 'Weatherly',
           home: HomeScreen(),
         ),
       ),

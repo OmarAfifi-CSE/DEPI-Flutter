@@ -55,9 +55,9 @@ class HomeScreen extends StatelessWidget {
                             _buildSearchBar(context, weatherController, theme),
                             SizedBox(height: 24.h),
                             _buildMainWeatherInfo(context, weather, theme),
-                            SizedBox(height: 32.h),
+                            SizedBox(height: 24.h),
                             _buildWeatherDetails(weather, theme),
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
                             _buildForecastSection(context, weather, theme),
                           ],
                         ),
@@ -82,11 +82,11 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildSearchBar(context, weatherController, theme),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Center(
             child: Text(
               'Search for a city to get started!',
-              style: TextStyle(color: theme.primaryTextColor, fontSize: 18),
+              style: TextStyle(color: theme.primaryTextColor, fontSize: 18.sp),
               textAlign: TextAlign.center,
             ),
           ),
@@ -100,6 +100,10 @@ class HomeScreen extends StatelessWidget {
     WeatherController weatherController,
     WeatherTheme theme,
   ) {
+    final baseBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(50.r),
+      borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+    );
     return GestureDetector(
       onTap: () async {
         final selectedCity = await Navigator.push(
@@ -140,24 +144,9 @@ class HomeScreen extends StatelessWidget {
                   Icons.search,
                   color: theme.primaryTextColor.withValues(alpha: 0.8),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50.r),
-                  borderSide: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.3),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50.r),
-                  borderSide: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.3),
-                  ),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50.r),
-                  borderSide: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.3),
-                  ),
-                ),
+                border: baseBorder,
+                enabledBorder: baseBorder,
+                disabledBorder: baseBorder,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50.r),
                   borderSide: BorderSide(
@@ -271,7 +260,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          Divider(height: 32, color: Colors.transparent),
+          SizedBox(height: 32.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -319,7 +308,7 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: theme.containerColor,
           child: _buildHourlyForecast(weather, theme),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         GlassContainer(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
           backgroundColor: theme.containerColor,
