@@ -24,6 +24,7 @@ class HomeScreen extends StatelessWidget {
     final weather = weatherController.weather;
     final WeatherTheme theme = WeatherTheme.getThemeForWeather(
       weather?.conditionCode,
+      weather?.isDay,
     );
 
     return Scaffold(
@@ -193,7 +194,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                weather.conditionCode == 1000
+                weather.conditionCode == 1000 && weather.isDay == 1
                     ? Icons.wb_sunny
                     : theme.weatherIcon,
                 color: theme.primaryTextColor,

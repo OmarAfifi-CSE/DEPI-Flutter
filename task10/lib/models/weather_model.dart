@@ -63,6 +63,7 @@ class Weather {
   final double feelsLike;
   final String condition;
   final int conditionCode;
+  final int isDay;
   final String iconCode;
   final double windSpeed;
   final double humidity;
@@ -79,6 +80,7 @@ class Weather {
     required this.feelsLike,
     required this.condition,
     required this.conditionCode,
+    required this.isDay,
     required this.iconCode,
     required this.windSpeed,
     required this.humidity,
@@ -108,6 +110,7 @@ class Weather {
       feelsLike: (json['current']['feelslike_c'] as num).toDouble(),
       condition: json['current']['condition']['text'],
       conditionCode: (json['current']['condition']['code'] as num).toInt(),
+      isDay: (json['current']['is_day'] as num).toInt(),
       iconCode: (json['current']['condition']['icon'] as String).replaceAll(
         '64x64',
         '128x128',

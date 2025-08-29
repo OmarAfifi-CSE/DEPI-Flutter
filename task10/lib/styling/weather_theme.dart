@@ -7,7 +7,6 @@ class WeatherTheme {
   final String backgroundImage;
   final IconData? weatherIcon;
   final Color primaryTextColor;
-  final Color secondaryTextColor;
   final Color containerColor;
   final Color? accentColor;
 
@@ -15,16 +14,21 @@ class WeatherTheme {
     required this.backgroundImage,
     required this.weatherIcon,
     required this.primaryTextColor,
-    required this.secondaryTextColor,
     required this.containerColor,
     this.accentColor,
   });
+
+  static final WeatherTheme nightTheme = WeatherTheme(
+    backgroundImage: AppAssets.nightBackground,
+    weatherIcon: FontAwesomeIcons.solidMoon,
+    primaryTextColor: const Color(0xffcedfff),
+    containerColor: const Color(0xff253A74),
+  );
 
   static final WeatherTheme sunnyTheme = WeatherTheme(
     backgroundImage: AppAssets.sunnyBackground,
     weatherIcon: FontAwesomeIcons.sun,
     primaryTextColor: const Color(0xffbe8667),
-    secondaryTextColor: Colors.black54,
     containerColor: const Color(0xffFAE2BD),
   );
 
@@ -32,7 +36,6 @@ class WeatherTheme {
     backgroundImage: AppAssets.cloudyBackground,
     weatherIcon: FontAwesomeIcons.cloud,
     primaryTextColor: Color(0xffc2ecff),
-    secondaryTextColor: Colors.white,
     containerColor: Color(0xff5A8BAB),
   );
 
@@ -40,7 +43,6 @@ class WeatherTheme {
     backgroundImage: AppAssets.rainyBackground,
     weatherIcon: FontAwesomeIcons.cloudRain,
     primaryTextColor: Color(0xffd8fff7),
-    secondaryTextColor: Colors.white70,
     containerColor: Color(0xff7FC3AE),
   );
 
@@ -48,13 +50,15 @@ class WeatherTheme {
     backgroundImage: AppAssets.snowyBackground,
     weatherIcon: FontAwesomeIcons.snowflake,
     primaryTextColor: Color(0xfffefeff),
-    secondaryTextColor: Colors.white70,
     containerColor: Color(0xffA7ACC4),
   );
 
-  static WeatherTheme getThemeForWeather(int? code) {
+  static WeatherTheme getThemeForWeather(int? code, int? isDay) {
     switch (code) {
       case 1000:
+        if (isDay == 0) {
+          return nightTheme;
+        }
         return sunnyTheme;
       case 1003:
       case 1006:
