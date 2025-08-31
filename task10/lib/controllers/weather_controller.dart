@@ -7,7 +7,7 @@ import '../models/weather_model.dart';
 class WeatherController extends ChangeNotifier {
   WeatherService weatherService = WeatherService();
   Weather? weather;
-  late String city;
+  String city = "Cairo";
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
@@ -24,6 +24,7 @@ class WeatherController extends ChangeNotifier {
         position.longitude,
       );
       weather = Weather.fromJson(weatherData);
+      city = weather!.cityName;
     } catch (e) {
       print('Omar :: Could not get current location: $e');
       try {
@@ -58,6 +59,7 @@ class WeatherController extends ChangeNotifier {
     try {
       final weatherData = await weatherService.getWeatherByCity(city);
       weather = Weather.fromJson(weatherData);
+      city = weather!.cityName;
     } catch (e) {
       print("Omar :: Error fetching weather data: $e");
     } finally {
