@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+import 'package:task12/controllers/cubit/todo_cubit.dart';
+import 'package:task12/models/todo_model.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
-  const TodoDetailsScreen({Key? key}) : super(key: key);
+  final TodoModel? todo;
+
+  const TodoDetailsScreen({Key? key, this.todo}) : super(key: key);
 
   @override
   State<TodoDetailsScreen> createState() => _TodoDetailsScreenState();
 }
 
 class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.todo != null) {
+      _titleController.text = widget.todo!.title;
+      _descriptionController.text = widget.todo!.description ?? '';
+      if (widget.todo!.date != null) {
+        _dateController.text = DateFormat(
+          'MM/dd/yyyy',
+        ).format(widget.todo!.date!);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -24,7 +45,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: widget.todo?.date ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
@@ -54,21 +75,24 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         scrolledUnderElevation: 0.1,
         elevation: 0.1,
         surfaceTintColor: Colors.white,
-        shadowColor: Colors.black.withValues(alpha: 0.6),
+        shadowColor: Colors.black.withValues(alpha: 0.1),
         centerTitle: true,
-        title: const Text('Add Details'),
+        title: Text(widget.todo == null ? 'Add Details' : 'Edit Details'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildTodoTitle(),
-              const SizedBox(height: 16),
-              _buildTodoDescription(),
-              const SizedBox(height: 16),
-              _buildTodoDeadlineDate(context),
-            ],
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _buildTodoTitle(),
+                const SizedBox(height: 16),
+                _buildTodoDescription(),
+                const SizedBox(height: 16),
+                _buildTodoDeadlineDate(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -76,7 +100,35 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                if (widget.todo == null) {
+                  final newTodo = TodoModel(
+                    id: const Uuid().v4(),
+                    title: _titleController.text,
+                    description: _descriptionController.text.isNotEmpty
+                        ? _descriptionController.text
+                        : null,
+                    date: _dateController.text.isNotEmpty
+                        ? DateFormat('MM/dd/yyyy').parse(_dateController.text)
+                        : null,
+                  );
+                  context.read<TodoCubit>().addTodo(newTodo);
+                } else {
+                  final updatedTodo = widget.todo!.copyWith(
+                    title: _titleController.text,
+                    description: _descriptionController.text.isNotEmpty
+                        ? _descriptionController.text
+                        : null,
+                    date: _dateController.text.isNotEmpty
+                        ? DateFormat('MM/dd/yyyy').parse(_dateController.text)
+                        : null,
+                  );
+                  context.read<TodoCubit>().updateTodo(updatedTodo);
+                }
+                Navigator.of(context).pop();
+              }
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blueAccent,
               fixedSize: Size(MediaQuery.sizeOf(context).width, 60),
@@ -102,7 +154,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -119,7 +171,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
         children: [
           const Text('Todo Title'),
           const SizedBox(height: 8),
-          TextField(
+          TextFormField(
             controller: _titleController,
             decoration: const InputDecoration(
               hintText: 'Enter todo title',
@@ -127,6 +179,12 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 borderSide: BorderSide(color: Colors.blueAccent, width: 2),
               ),
             ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Title cannot be empty';
+              }
+              return null;
+            },
           ),
         ],
       ),
