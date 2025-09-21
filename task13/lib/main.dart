@@ -149,6 +149,8 @@ class _HotelBookingScreenState extends State<HotelBookingScreen>
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xffF6F7F8),
+        elevation: 5,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
