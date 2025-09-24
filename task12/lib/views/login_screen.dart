@@ -25,6 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text(
+                    'MyTodo',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent.shade700,
+                    ),
+                  ),
                   const Icon(
                     Icons.check_circle_outline_outlined,
                     size: 64,
