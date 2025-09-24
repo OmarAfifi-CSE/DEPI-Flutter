@@ -25,11 +25,31 @@ class NotesApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
             centerTitle: true,
+            titleTextStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
             elevation: 0,
             scrolledUnderElevation: 0,
           ),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: Colors.cyan,
+          ),
+          dialogTheme: DialogThemeData(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            backgroundColor: Colors.white,
+            titleTextStyle: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+            contentTextStyle: const TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
+            ),
           ),
         ),
         debugShowCheckedModeBanner: false,
