@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task14/controllers/note_cubit.dart';
 import 'package:task14/models/note_model.dart';
 import 'package:task14/views/create_note_view.dart';
 
@@ -19,7 +21,10 @@ class NoteDetailsView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreateNoteView(note: note),
+                  builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<NoteCubit>(context),
+                    child: CreateNoteView(note: note),
+                  ),
                 ),
               );
             },

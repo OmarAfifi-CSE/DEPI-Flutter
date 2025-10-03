@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task14/controllers/note_cubit.dart';
-import 'package:task14/views/notes_list_view.dart';
+import 'package:task14/controllers/auth_cubit/auth_cubit.dart';
+import 'package:task14/views/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +15,8 @@ class NotesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NoteCubit()..getNotes(),
+    return BlocProvider<AuthCubit>(
+      create: (context) => AuthCubit(),
       child: MaterialApp(
         title: 'Notes App',
         theme: ThemeData(
@@ -53,7 +53,7 @@ class NotesApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const NotesListView(),
+        home: const AuthWrapper(),
       ),
     );
   }

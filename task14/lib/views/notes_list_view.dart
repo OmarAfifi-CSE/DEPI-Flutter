@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task14/controllers/auth_cubit/auth_cubit.dart';
 import 'package:task14/controllers/note_cubit.dart';
 import 'package:task14/controllers/note_state.dart';
 import 'package:task14/views/create_note_view.dart';
@@ -88,7 +89,10 @@ class NotesListView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NoteDetailsView(note: note),
+                        builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<NoteCubit>(context),
+                          child: NoteDetailsView(note: note),
+                        ),
                       ),
                     );
                   },
@@ -102,11 +106,57 @@ class NotesListView extends StatelessWidget {
           return const Center(child: Text('Something went wrong.'));
         },
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.cyan),
+              child: Text(
+                'Menu',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                Navigator.of(context).pop();
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: const Text('Logout'),
+                    content: const Text('Are you sure you want to log out?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                          context.read<AuthCubit>().signOut();
+                        },
+                        child: const Text('Logout'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CreateNoteView()),
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<NoteCubit>(context),
+                child: const CreateNoteView(),
+              ),
+            ),
           );
         },
         child: const Icon(Icons.add),

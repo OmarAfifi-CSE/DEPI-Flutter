@@ -4,8 +4,9 @@ class Note {
   final String? id;
   final String title;
   final String content;
+  final Timestamp? createdAt;
 
-  Note({this.id, required this.title, required this.content});
+  Note({this.id, required this.title, required this.content, this.createdAt});
 
   factory Note.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
@@ -13,10 +14,15 @@ class Note {
       id: doc.id,
       title: data['title'] ?? '',
       content: data['content'] ?? '',
+      createdAt: data['createdAt'],
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {'title': title, 'content': content};
+    return {
+      'title': title,
+      'content': content,
+      'createdAt': createdAt ?? Timestamp.now(),
+    };
   }
 }

@@ -148,7 +148,7 @@ class _CreateNoteViewState extends State<CreateNoteView> {
                 ),
               ),
             ),
-            Spacer(),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _saveNote,
               style: ElevatedButton.styleFrom(

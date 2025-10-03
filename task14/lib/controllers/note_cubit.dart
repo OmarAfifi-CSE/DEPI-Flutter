@@ -5,23 +5,30 @@ import '../models/note_model.dart';
 import 'note_state.dart';
 
 class NoteCubit extends Cubit<NoteState> {
-  final CollectionReference _notesCollection =
-  FirebaseFirestore.instance.collection('notes');
+  late final CollectionReference _notesCollection;
   StreamSubscription? _notesSubscription;
+  final String userId;
 
-  NoteCubit() : super(NoteInitial());
+  NoteCubit({required this.userId}) : super(NoteInitial()) {
+    _notesCollection = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('notes');
+  }
 
   void getNotes() {
     try {
       emit(NoteLoading());
       _notesSubscription?.cancel();
       _notesSubscription = _notesCollection
+          .orderBy('createdAt')
           .snapshots()
           .listen((snapshot) {
-        final notes =
-        snapshot.docs.map((doc) => Note.fromFirestore(doc)).toList();
-        emit(NoteLoaded(notes));
-      });
+            final notes = snapshot.docs
+                .map((doc) => Note.fromFirestore(doc))
+                .toList();
+            emit(NoteLoaded(notes));
+          });
     } catch (e) {
       emit(NoteError('Failed to fetch notes: $e'));
     }
